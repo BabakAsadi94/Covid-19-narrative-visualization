@@ -1,71 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Covid Data Visualization</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="intro" id="intro">
-        <h1>Covid Data Visualization in the US</h1>
-        <p>This is a narrative visualization for Covid-19 data in the United States. Explore the different scenes to understand the trends and impact of the pandemic.</p>
-        <button class="nav-button" onclick="navigateTo(1)">Start Visualization</button>
-    </div>
-
-    <div class="scene" id="scene1">
-        <div class="button-group">
-            <button id="new-cases-btn" data-type="covid_cases">New Cases</button>
-            <button id="cumulative-cases-btn" data-type="cum_covid_cases">Cumulative Cases</button>
-            <button id="both-btn" data-type="both">Both</button>
-            <button id="switch-y-axis">Switch Y-Axis</button>
-        </div>
-        <div id="visualization"></div>
-    </div>
-
-    <div class="scene" id="scene2">
-        <div class="button-group">
-            <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
-            <button id="cumulative-deaths-btn" data-type="cum_covid_deaths">Cumulative Deaths</button>
-            <button id="both-btn" data-type="both">Both</button>
-            <button id="switch-y-axis">Switch Y-Axis</button>
-        </div>
-        <div id="visualization"></div>
-    </div>
-
-    <div class="scene" id="scene3">
-        <div class="button-group">
-            <button id="cases-btn" class="cases active" data-type="cases">Cases</button>
-            <button id="deaths-btn" class="deaths" data-type="deaths">Deaths</button>
-        </div>
-        <div class="slider-container">
-            <input type="range" id="time-slider" min="0" max="160" step="1">
-            <div id="slider-label" class="slider-label">Date: </div>
-            <div class="slider-labels"></div>
-        </div>
-        <div class="chart-container">
-            <div id="chart" class="chart"></div>
-        </div>
-    </div>
-
-    <div class="scene" id="scene4">
-        <div class="container">
-            <div class="header">
-                <h1>Covid Data Visualization by State</h1>
-                <label for="state-select">Select a State:</label>
-                <select id="state-select"></select>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/my-viz-styles.css">
+        <title>cs-416-charlie-truong</title>
+    </head>
+    <body>
+        <h3>Vaccines Beat the Covid-19 Pandemic in the U.S.</h3>
+        <div>Data Source: <a href="https://coronavirus.jhu.edu/" target="_blank">John Hopkins</a></div>
+        <div id="map-tooltip"></div>
+        <div id="slide-controller">
+            <div id="scene-label">
+                <div id="scene-label-prefix">Scene</div>
+                <div id="scene-number">1</div>
             </div>
-            <div id="chart-cases" class="chart"></div>
-            <div id="chart-deaths" class="chart"></div>
+            <button id="scene-button" onclick="changeSlide()">Next</button>
         </div>
-    </div>
-
-    <!-- Navigation Buttons -->
-    <div class="nav-buttons">
-        <button class="nav-button" id="prev-button" onclick="navigate(-1)">Previous</button>
-        <button class="nav-button" id="next-button" onclick="navigate(1)">Next</button>
-    </div>
-
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="script.js"></script>
-</body>
+        <div id="charts">
+            <div id="timeseries">
+                <div id="timeseries-chart-title">New Cases, New Deaths, and Cum. Vaccinations by Week</div>
+            </div>
+            <div id="deaths-map">
+                <div id="deaths-map-title">
+                    <div>Total Deaths by State (click to filter time series by state)</div>
+                    <button id="remove-state-filter" onclick="changeSlide()">Remove State Filter</button>
+                </div>
+            </div>
+        </div>
+        <script src="https://d3js.org/d3.v7.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+        <script src="https://unpkg.com/topojson-client@3"></script>
+        <script src="js/my-viz.js" charset="utf-8"></script>
+    </body>
 </html>
