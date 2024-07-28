@@ -20,7 +20,7 @@ body {
     background-color: #007BFF;
     border: none;
     color: white;
-    padding: 10px 24px;
+    padding: 5x 12px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -31,7 +31,7 @@ body {
 }
 
 .nav-button:hover {
-    background-color: #0056b3;
+    background-color: #333333;
 }
 
 .button-group {
