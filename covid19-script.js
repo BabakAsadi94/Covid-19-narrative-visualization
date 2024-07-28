@@ -199,7 +199,6 @@ function initScene1() {
 }
 
 function initScene2() {
-function initScene2() {
     d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
         const countryData = d3.rollups(
             data,
@@ -289,8 +288,8 @@ function initScene2() {
             yScaleLeft2 = isLogScale2 ? yScaleLeftLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
             yScaleRight2 = isLogScale2 ? yScaleRightLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
 
-            yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10, isLogScale2 ? ".1s" : "");
-            yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10, isLogScale2 ? ".1s" : "");
+            yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10);
+            yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
 
             svg2.select(".y-left").transition().duration(500).call(yAxisLeft2);
             svg2.select(".y-right").transition().duration(500).call(yAxisRight2);
@@ -304,9 +303,12 @@ function initScene2() {
             updateHover2();
         }
 
-        d3.select("#scene2 #switch-y-axis").on("click", toggleScale2);
-
-        const tooltip2 = d3.select('body').append('div').attr('class', 'tooltip');
+        function updateHover2() {
+            d3.selectAll('.dotcovid_deaths').remove();
+            d3.selectAll('.dotcum_covid_deaths').remove();
+            addHover2(pathNewDeaths2, yScaleLeft2, 'covid_deaths', 'red');
+            addHover2(pathCumDeaths2, yScaleRight2, 'cum_covid_deaths', 'darkred');
+        }
 
         function addHover2(path, yScale, dataKey, color) {
             const focus = svg2.append('g').attr('class', 'focus').style('display', 'none');
@@ -328,27 +330,28 @@ function initScene2() {
                 });
         }
 
-        function updateHover2() {
-            d3.selectAll('.dotcovid_deaths').remove();
-            d3.selectAll('.dotcum_covid_deaths').remove();
-            addHover2(pathNewDeaths2, yScaleLeft2, 'covid_deaths', 'red');
-            addHover2(pathCumDeaths2, yScaleRight2, 'cum_covid_deaths', 'darkred');
-        }
-
         function updateVisualization2(dataType) {
             d3.selectAll('#scene2 #visualization2 path').attr('opacity', 0);
             svg2.select('.line.' + dataType).attr('opacity', 1);
             updateHover2();
         }
 
-        updateVisualization2('new-deaths');
-        svg2.selectAll('.line').on('click', function () {
-            updateVisualization2(d3.select(this).attr('class').split(' ')[1]);
+        function handleButtonClick() {
+            // Ensure that no line is displayed initially
+            d3.selectAll('#scene2 #visualization2 path').attr('opacity', 0);
+        }
+
+        d3.select("#scene2 #plot-button").on("click", function() {
+            handleButtonClick();
+            svg2.selectAll('.line').on('click', function () {
+                updateVisualization2(d3.select(this).attr('class').split(' ')[1]);
+            });
         });
     });
 }
 
 d3.select("#scene2 #plot-button").on("click", initScene2);
+
 
 
 
