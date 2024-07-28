@@ -14,7 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white; /* Default color for text in the intro */
+    color: black; /* Default color for text in the intro */
     padding: 0 20px;
 }
 
