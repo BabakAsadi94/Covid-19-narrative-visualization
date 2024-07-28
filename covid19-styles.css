@@ -127,3 +127,8 @@ body {
     width: 50%;
     height: 400px;
 }
+
+.y-axis text {
+    fill: #000;
+    font-size: 12px;
+}
