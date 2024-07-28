@@ -11,6 +11,32 @@ body {
     text-align: center;
 }
 
+#intro {
+    background: url('https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_718788_16571762918567049.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-button {
+    background-color: #333333;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.start-button:hover {
+    background-color: #555555;
+}
+
 .nav-buttons {
     text-align: left;
     margin-top: 20px;
@@ -20,7 +46,7 @@ body {
     background-color: black;
     border: none;
     color: white;
-    padding: 5x 12px;
+    padding: 5px 12px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
