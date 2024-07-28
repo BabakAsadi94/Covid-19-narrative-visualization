@@ -598,6 +598,265 @@ function initScene4() {
             svg.selectAll(".line").remove(); // Ensure only two lines are present at any time
             svg.selectAll(".annotation").remove(); // Remove previous annotations
 
+            const plotData = countryData.filter(d => d.cum_one_vax_dose === 0);
+            const remainingData = countryData.filter(d => d.cum_one_vax_dose > 0);
+
+            const leftPath = svg.append("path")
+                .datum(plotData)
+                .attr("class", "line left-line")
+                .attr("fill", "none")
+                .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
+                .attr("stroke-width", 2)
+                .attr("d", lineLeft);
+
+            const rightPath = svg.append("path")
+                .datum(plotData)
+                .attr("class", "line right-line")
+                .attr("fill", "none")
+                .attr("stroke", "green")
+                .attr("stroke-width", 2)
+                .attr("d", lineRight);
+
+            const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
+
+            leftPath.transition().duration(4000).attrTween("stroke-dasharray", function () {
+                const length = this.getTotalLength();
+                return d3.interpolateString("0," + length, length + "," + length);
+            });
+
+            rightPath.transition().duration(4000).attrTween("stroke-dasharray", function () {
+                const length = this.getTotalLength();
+                return d3.interpolateString("0," + length, length + "," + length);
+            }).on("end", () => {
+                if (firstVaxDate) {
+                    svg.append("text")
+                        .attr("class", "annotation")
+                        .attr("x", xScale(firstVaxDate.date))
+                        .attr("y", yScaleRight(firstVaxDate.cum_one_vax_dose))
+                        .attr("dy", -10)
+                        .attr("text-anchor", "middle")
+                        .style("font-size", "12px")
+                        .style("font-weight", "bold")
+                        .style("fill", "green")
+                        .text("Vaccinations Started");
+
+                    setTimeout(() => {
+                        const leftRemainingPath = svg.append("path")
+                            .datum(remainingData)
+                            .attr("class", "line left-remaining-line")
+                            .attr("fill", "none")
+                            .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
+                            .attr("stroke-width", 2)
+                            .attr("d", lineLeft);
+
+                        const rightRemainingPath = svg.append("path")
+                            .datum(remainingData)
+                            .attr("class", "line right-remaining-line")
+                            .attr("fill", "none")
+                            .attr("stroke", "green")
+                            .attr("stroke-width", 2)
+                            .attr("d", lineRight);
+
+                        leftRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
+                            const length = this.getTotalLength();
+                            return d3.interpolateString("0," + length, length + "," + length);
+                        });
+
+                        rightRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
+                            const length = this.getTotalLength();
+                            return d3.interpolateString("0," + length, length + "," + length);
+                        });
+                    }, 2000);
+                }
+            });
+        }
+
+        function updateVisualization() {
+            const filteredData = filterData(data);
+            const countryData = aggregateData(filteredData);
+            const scales = updateScales(countryData);
+            updateLines(scales, countryData);
+        }
+
+        // Region select change event
+        d3.select("#region-select").on("change", function () {
+            currentRegion = this.value;
+            if (currentRegion === 'state') {
+                d3.select("#state-select").style("display", "inline-block");
+            } else {
+                d3.select("#state-select").style("display", "none");
+            }
+            updateVisualization();
+        });
+
+        // State select change event
+        d3.select("#state-select").on("change", function () {
+            currentState = this.value;
+            updateVisualization();
+        });
+
+        // Button actions
+        d3.selectAll('#scene4 .button-group button[data-type]').on('click', function () {
+            currentDataType = d3.select(this).attr('data-type');
+            d3.selectAll('#scene4 .button-group button[data-type]').classed('active', false);
+            d3.select(this).classed('active', true);
+            updateVisualization();
+        });
+
+        // Initial setup
+        svg.append('text')
+            .attr('class', 'y-axis-label-left')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -margin.left + 30)
+            .attr('x', -height / 2)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '16px')
+            .style('font-weight', 'bold');
+
+        svg.append('text')
+            .attr('class', 'y-axis-label-right')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', width + margin.right - 20)
+            .attr('x', -height / 2)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '16px')
+            .style('font-weight', 'bold');
+
+        svg.append('text')
+            .attr('class', 'x-axis-label')
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom - 10)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '16px')
+            .style('font-weight', 'bold')
+            .text('Time');
+    });
+}
+
+    d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
+        // Get unique states
+        const states = Array.from(new Set(data.map(d => d.state))).sort();
+        
+        // Populate state select dropdown
+        const stateSelect = d3.select("#state-select");
+        states.forEach(state => {
+            stateSelect.append("option")
+                .attr("value", state)
+                .text(state);
+        });
+
+        // Set up SVG and dimensions
+        const margin = { top: 20, right: 100, bottom: 60, left: 100 };
+        const width = 1200 - margin.left - margin.right;
+        const height = 600 - margin.top - margin.bottom;
+
+        const svg = d3.select("#scene4 #visualization")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        let currentDataType = 'cases';
+        let currentRegion = 'nation';
+        let currentState = '';
+
+        function filterData(data) {
+            if (currentRegion === 'state') {
+                return data.filter(d => d.state === currentState);
+            }
+            return data;
+        }
+
+        function aggregateData(filteredData) {
+            return d3.rollups(
+                filteredData,
+                v => ({
+                    date: new Date(v[0].date),
+                    covid_cases: d3.sum(v, d => +d.covid_cases),
+                    covid_deaths: d3.sum(v, d => +d.covid_deaths),
+                    cum_one_vax_dose: d3.sum(v, d => +d.cum_one_vax_dose)
+                }),
+                d => d.date
+            ).map(([key, value]) => value);
+        }
+
+        function updateScales(countryData) {
+            const xScale = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width]);
+            let yScaleLeft = d3.scaleLinear().domain([0, d3.max(countryData, d => d[currentDataType === 'cases' ? 'covid_cases' : 'covid_deaths'])]).range([height, 0]);
+            let yScaleRight = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_one_vax_dose)]).range([height, 0]);
+
+            const yAxisLeft = d3.axisLeft(yScaleLeft).ticks(10);
+            const yAxisRight = d3.axisRight(yScaleRight).ticks(10);
+            const xAxis = d3.axisBottom(xScale);
+
+            svg.select(".x-axis").remove();
+            svg.select(".y-left").remove();
+            svg.select(".y-right").remove();
+
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", `translate(0,${height})`)
+                .call(xAxis);
+
+            svg.append("g")
+                .attr("class", "y-axis y-left")
+                .call(yAxisLeft);
+
+            svg.append("g")
+                .attr("class", "y-axis y-right")
+                .attr("transform", `translate(${width},0)`)
+                .call(yAxisRight);
+
+            svg.append('text')
+                .attr('class', 'y-axis-label-left')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 30)
+                .attr('x', -height / 2)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold');
+
+            svg.append('text')
+                .attr('class', 'y-axis-label-right')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', width + margin.right - 20)
+                .attr('x', -height / 2)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold');
+
+            svg.append('text')
+                .attr('class', 'x-axis-label')
+                .attr('x', width / 2)
+                .attr('y', height + margin.bottom - 10)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold')
+                .text('Time');
+
+            svg.select('.y-axis-label-left').text(currentDataType === 'cases' ? 'New Cases' : 'New Deaths').style('fill', currentDataType === 'cases' ? 'blue' : 'red');
+            svg.select('.y-axis-label-right').text('Cumulative Vaccinations').style('fill', 'green');
+
+            return { xScale, yScaleLeft, yScaleRight };
+        }
+
+        function updateLines(scales, countryData) {
+            const { xScale, yScaleLeft, yScaleRight } = scales;
+
+            const lineLeft = d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScaleLeft(d[currentDataType === 'cases' ? 'covid_cases' : 'covid_deaths']))
+                .curve(d3.curveMonotoneX);
+
+            const lineRight = d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScaleRight(d.cum_one_vax_dose))
+                .curve(d3.curveMonotoneX);
+
+            svg.selectAll(".line").remove(); // Ensure only two lines are present at any time
+            svg.selectAll(".annotation").remove(); // Remove previous annotations
+
             const leftPath = svg.append("path")
                 .datum(countryData)
                 .attr("class", "line left-line")
