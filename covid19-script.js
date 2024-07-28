@@ -571,37 +571,40 @@ function initScene4() {
             svg.selectAll(".line").remove(); // Ensure only two lines are present at any time
             svg.selectAll(".annotation").remove(); // Remove previous annotations
 
-            // Filter data to plot only until the first non-zero cumulative vaccination
-            const plotData = countryData.filter(d => d.cum_one_vax_dose === 0);
-            const remainingData = countryData.filter(d => d.cum_one_vax_dose > 0);
-
             const leftPath = svg.append("path")
-                .datum(plotData)
+                .datum(countryData)
                 .attr("class", "line left-line")
                 .attr("fill", "none")
                 .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
                 .attr("stroke-width", 2)
-                .attr("d", lineLeft);
+                .attr("d", lineLeft)
+                .attr("stroke-dasharray", function () {
+                    const length = this.getTotalLength();
+                    return `0,${length}`;
+                });
 
             const rightPath = svg.append("path")
-                .datum(plotData)
+                .datum(countryData)
                 .attr("class", "line right-line")
                 .attr("fill", "none")
                 .attr("stroke", "green")
                 .attr("stroke-width", 2)
-                .attr("d", lineRight);
-
-            const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
+                .attr("d", lineRight)
+                .attr("stroke-dasharray", function () {
+                    const length = this.getTotalLength();
+                    return `0,${length}`;
+                });
 
             leftPath.transition().duration(4000).attrTween("stroke-dasharray", function () {
                 const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
+                return d3.interpolateString(`0,${length}`, `${length},${length}`);
             });
 
             rightPath.transition().duration(4000).attrTween("stroke-dasharray", function () {
                 const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on("end", () => {
+                return d3.interpolateString(`0,${length}`, `${length},${length}`);
+            }).on("end", function() {
+                const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
                 if (firstVaxDate) {
                     svg.append("text")
                         .attr("class", "annotation")
@@ -614,6 +617,8 @@ function initScene4() {
                         .style("fill", "green")
                         .text("Vaccinations Started");
 
+                    const remainingData = countryData.filter(d => d.date > firstVaxDate.date);
+
                     setTimeout(() => {
                         const leftRemainingPath = svg.append("path")
                             .datum(remainingData)
@@ -621,7 +626,11 @@ function initScene4() {
                             .attr("fill", "none")
                             .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
                             .attr("stroke-width", 2)
-                            .attr("d", lineLeft);
+                            .attr("d", lineLeft)
+                            .attr("stroke-dasharray", function () {
+                                const length = this.getTotalLength();
+                                return `0,${length}`;
+                            });
 
                         const rightRemainingPath = svg.append("path")
                             .datum(remainingData)
@@ -629,16 +638,20 @@ function initScene4() {
                             .attr("fill", "none")
                             .attr("stroke", "green")
                             .attr("stroke-width", 2)
-                            .attr("d", lineRight);
+                            .attr("d", lineRight)
+                            .attr("stroke-dasharray", function () {
+                                const length = this.getTotalLength();
+                                return `0,${length}`;
+                            });
 
                         leftRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
                             const length = this.getTotalLength();
-                            return d3.interpolateString("0," + length, length + "," + length);
+                            return d3.interpolateString(`0,${length}`, `${length},${length}`);
                         });
 
                         rightRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
                             const length = this.getTotalLength();
-                            return d3.interpolateString("0," + length, length + "," + length);
+                            return d3.interpolateString(`0,${length}`, `${length},${length}`);
                         });
                     }, 2000);
                 }
@@ -653,7 +666,6 @@ function initScene4() {
         }
 
         function initializeAxes() {
-            // Create empty scales for axes
             const xScale = d3.scaleTime().range([0, width]);
             const yScaleLeft = d3.scaleLinear().range([height, 0]);
             const yScaleRight = d3.scaleLinear().range([height, 0]);
@@ -736,3 +748,5 @@ function initScene4() {
         });
     });
 }
+
+           
