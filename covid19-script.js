@@ -1,44 +1,27 @@
+let currentScene = 0;
+const scenes = document.querySelectorAll('.scene');
+const intro = document.getElementById('intro');
+
+function navigate(offset) {
+    scenes[currentScene].style.display = 'none';
+    currentScene += offset;
+    if (currentScene < 0) currentScene = scenes.length - 1;
+    if (currentScene >= scenes.length) currentScene = 0;
+    scenes[currentScene].style.display = 'block';
+}
+
+function navigateTo(sceneIndex) {
+    intro.style.display = 'none';
+    scenes[currentScene].style.display = 'none';
+    currentScene = sceneIndex;
+    scenes[currentScene].style.display = 'block';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const intro = document.getElementById('intro');
-    const scenes = document.querySelectorAll('.scene');
-    let currentScene = -1;
-
-    function navigate(offset) {
-        if (currentScene !== -1) {
-            scenes[currentScene].style.display = 'none';
-        }
-        currentScene += offset;
-        if (currentScene < 0) currentScene = scenes.length - 1;
-        if (currentScene >= scenes.length) currentScene = 0;
-        scenes[currentScene].style.display = 'block';
-    }
-
-    function navigateTo(sceneIndex) {
-        intro.style.display = 'none';
-        if (currentScene !== -1) {
-            scenes[currentScene].style.display = 'none';
-        }
-        currentScene = sceneIndex;
-        scenes[currentScene].style.display = 'block';
-    }
-
-    document.getElementById('start-visualization-btn').addEventListener('click', () => {
-        navigateTo(0);
-    });
-
-    document.querySelectorAll('.nav-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const offset = button.textContent === 'Next' ? 1 : -1;
-            navigate(offset);
-        });
-    });
-
-    // Initialize the intro page visibility
     intro.style.display = 'block';
     scenes.forEach(scene => scene.style.display = 'none');
 });
 
-// Rest of your existing code for fetching data and visualizations
 d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
     const countryData = d3.rollups(
         data,
@@ -75,10 +58,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     }));
 
     // Scene 1: New Cases and Cumulative Cases Visualization
-    const svg1 = d3.select("#visualization1").append("svg").attr("width", 1000).attr("height", 600);
+    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 800).attr("height", 500);
     const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
-    const width1 = 1000 - margin1.left - margin1.right;
-    const height1 = 600 - margin1.top - margin1.bottom;
+    const width1 = 800 - margin1.left - margin1.right;
+    const height1 = 500 - margin1.top - margin1.bottom;
 
     let isLogScale1 = false;
     const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width1]);
@@ -194,21 +177,21 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         pathCumCases1.attr("opacity", 0);
 
         if (dataType === 'covid_cases') {
-            pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
         } else if (dataType === 'cum_covid_cases') {
-            pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
         } else {
-            pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             });
-            pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
@@ -226,10 +209,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 2: New Deaths and Cumulative Deaths Visualization
-    const svg2 = d3.select("#visualization2").append("svg").attr("width", 1000).attr("height", 600);
+    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 800).attr("height", 500);
     const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
-    const width2 = 1000 - margin2.left - margin2.right;
-    const height2 = 600 - margin2.top - margin2.bottom;
+    const width2 = 800 - margin2.left - margin2.right;
+    const height2 = 500 - margin2.top - margin2.bottom;
 
     let isLogScale2 = false;
     const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width2]);
@@ -345,21 +328,21 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         pathCumDeaths2.attr("opacity", 0);
 
         if (dataType === 'covid_deaths') {
-            pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
         } else if (dataType === 'cum_covid_deaths') {
-            pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
         } else {
-            pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             });
-            pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
+            pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
                 const length = this.getTotalLength();
                 return d3.interpolateString("0," + length, length + "," + length);
             }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
@@ -377,10 +360,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 3: State-wise Cases and Deaths
-    const svg3 = d3.select("#visualization3").append("svg").attr("width", 1080).attr("height", 600);
+    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1080).attr("height", 540);
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
     const width3 = 1080 - margin3.left - margin3.right;
-    const height3 = 600 - margin3.top - margin3.bottom;
+    const height3 = 540 - margin3.top - margin3.bottom;
     const xScale3 = d3.scaleBand().range([0, width3]).padding(0.1);
     const yScale3 = d3.scaleLinear().range([height3, 0]);
 
@@ -485,11 +468,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         stateSelect4.append("option").attr("value", d.state).text(d.state);
     });
 
-    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 1000).attr("height", 400);
-    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 1000).attr("height", 400);
+    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 800).attr("height", 400);
+    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 800).attr("height", 400);
 
     const margin4 = { top: 20, right: 30, bottom: 50, left: 60 };
-    const width4 = 1000 - margin4.left - margin4.right;
+    const width4 = 800 - margin4.left - margin4.right;
     const height4 = 400 - margin4.top - margin4.bottom;
 
     const xScale4 = d3.scaleTime().range([0, width4]);
@@ -575,39 +558,13 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
                     .style("font-size", "12px").style("font-weight", "bold")
                     .text(`${d3.timeFormat("%B %d, %Y")(firstVaxDate.date)}`);
             }
-
-            svgDeaths4.selectAll(".annotation").remove();
-            svgDeaths4.append("circle").attr("class", "annotation").attr("cx", xScale4(peakDateDeaths))
-                .attr("cy", yScaleDeaths4(peakDeaths)).attr("r", 5).attr("fill", "red");
-
-            svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateDeaths) + 15)
-                .attr("y", yScaleDeaths4(peakDeaths)).attr("alignment-baseline", "middle")
-                .style("font-size", "12px").style("font-weight", "bold").text(`Peak New Deaths`);
-
-            svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateDeaths) + 15)
-                .attr("y", yScaleDeaths4(peakDeaths) + 15).attr("alignment-baseline", "middle")
-                .style("font-size", "12px").style("font-weight", "bold")
-                .text(`${d3.timeFormat("%B %d, %Y")(peakDateDeaths)}: ${peakDeaths}`);
-
-            if (firstVaxDate) {
-                svgDeaths4.append("circle").attr("class", "annotation").attr("cx", xScale4(firstVaxDate.date))
-                    .attr("cy", yScaleDeaths4(firstVaxDate.covid_deaths)).attr("r", 10).attr("fill", "green");
-
-                svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                    .attr("y", yScaleDeaths4(firstVaxDate.covid_deaths)).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold").text(`Vaccinations Started:`);
-
-                svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                    .attr("y", yScaleDeaths4(firstVaxDate.covid_deaths) + 15).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold")
-                    .text(`${d3.timeFormat("%B %d, %Y")(firstVaxDate.date)}`);
-            }
         }, 1000);
     }
 
-    updateChart4(stateData[0].state);
-    d3.select("#scene4 #state-select").on('change', function () {
+    stateSelect4.on("change", function () {
         const selectedState = d3.select(this).property("value");
         updateChart4(selectedState);
     });
+
+    updateChart4(stateSelect4.property("value"));
 });
