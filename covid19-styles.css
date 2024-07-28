@@ -1,23 +1,23 @@
+/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
 }
 
 .scene {
     display: none;
-    padding: 20px;
-    text-align: center;
+}
+
+.scene.active {
+    display: block;
 }
 
 .nav-buttons {
-    text-align: left;
-    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .nav-button {
-    background-color: #007BFF;
+    background-color: #4CAF50;
     border: none;
     color: white;
     padding: 10px 24px;
@@ -31,45 +31,32 @@ body {
 }
 
 .nav-button:hover {
-    background-color: #0056b3;
-}
-
-.button-group {
-    margin-bottom: 20px;
-    text-align: center;
+    background-color: #45a049;
 }
 
 .button-group button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
     padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 8px;
-    border: none;
-    color: white;
 }
 
-#scene1 .button-group button {
+.button-group button:hover {
+    background-color: #45a049;
+}
+
+.button-group #cases-btn, .button-group #cases-btn4 {
     background-color: blue;
 }
 
-#scene2 .button-group button {
-    background-color: red;
-}
-
-#scene3 .button-group .cases {
-    background-color: blue;
-}
-
-#scene3 .button-group .deaths {
-    background-color: red;
-}
-
-#scene4 .button-group #cases-btn {
-    background-color: blue;
-}
-
-#scene4 .button-group #deaths-btn {
+.button-group #deaths-btn, .button-group #deaths-btn4 {
     background-color: red;
 }
 
@@ -88,63 +75,6 @@ body {
     transition: opacity 0.5s;
 }
 
-.chart-container, .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.chart {
-    width: 85%;
-    height: 540px;
-    margin: 20px 0;
-}
-
-.slider-container {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.slider-container input {
-    width: 85%;
-}
-
-.slider-label {
-    margin-top: 5px;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-}
-
-.slider-labels {
-    display: flex;
-    justify-content: space-between;
-    width: 85%;
-    margin: 0 auto;
-}
-
-.slider-labels span {
-    font-size: 12px;
-    color: gray;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.row {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-#chart-cases, #chart-deaths {
-    width: 50%;
-    height: 400px;
-}
-
 .select-group {
     text-align: center;
     margin-bottom: 20px;
@@ -153,4 +83,12 @@ body {
 .select-group select {
     font-size: 16px;
     padding: 8px;
+}
+
+.chart-container {
+    text-align: center;
+}
+
+.chart {
+    display: inline-block;
 }
