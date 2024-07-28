@@ -20,6 +20,7 @@ function navigateTo(sceneIndex) {
 document.addEventListener('DOMContentLoaded', () => {
     intro.style.display = 'block';
     scenes.forEach(scene => scene.style.display = 'none');
+    scenes[currentScene].style.display = 'block';
 });
 
 d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
@@ -58,10 +59,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     }));
 
     // Scene 1: New Cases and Cumulative Cases Visualization
-    const svg1 = d3.select("#scene1 #visualization").append("svg").attr("width", 800).attr("height", 500);
+    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1200).attr("height", 600);
     const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
-    const width1 = 800 - margin1.left - margin1.right;
-    const height1 = 500 - margin1.top - margin1.bottom;
+    const width1 = 1200 - margin1.left - margin1.right;
+    const height1 = 600 - margin1.top - margin1.bottom;
 
     let isLogScale1 = false;
     const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width1]);
@@ -209,10 +210,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 2: New Deaths and Cumulative Deaths Visualization
-    const svg2 = d3.select("#scene2 #visualization").append("svg").attr("width", 800).attr("height", 500);
+    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 600);
     const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
-    const width2 = 800 - margin2.left - margin2.right;
-    const height2 = 500 - margin2.top - margin2.bottom;
+    const width2 = 1200 - margin2.left - margin2.right;
+    const height2 = 600 - margin2.top - margin2.bottom;
 
     let isLogScale2 = false;
     const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width2]);
@@ -360,10 +361,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 3: State-wise Cases and Deaths
-    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1080).attr("height", 540);
+    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 800).attr("height", 450);
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
-    const width3 = 1080 - margin3.left - margin3.right;
-    const height3 = 540 - margin3.top - margin3.bottom;
+    const width3 = 800 - margin3.left - margin3.right;
+    const height3 = 450 - margin3.top - margin3.bottom;
     const xScale3 = d3.scaleBand().range([0, width3]).padding(0.1);
     const yScale3 = d3.scaleLinear().range([height3, 0]);
 
@@ -468,11 +469,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         stateSelect4.append("option").attr("value", d.state).text(d.state);
     });
 
-    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 800).attr("height", 400);
-    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 800).attr("height", 400);
+    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 600).attr("height", 400);
+    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 600).attr("height", 400);
 
     const margin4 = { top: 20, right: 30, bottom: 50, left: 60 };
-    const width4 = 800 - margin4.left - margin4.right;
+    const width4 = 600 - margin4.left - margin4.right;
     const height4 = 400 - margin4.top - margin4.bottom;
 
     const xScale4 = d3.scaleTime().range([0, width4]);
