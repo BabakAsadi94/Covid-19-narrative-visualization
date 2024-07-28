@@ -549,33 +549,6 @@ function initScene4() {
                 .attr("transform", `translate(${width},0)`)
                 .call(yAxisRight);
 
-            svg.append('text')
-                .attr('class', 'y-axis-label-left')
-                .attr('transform', 'rotate(-90)')
-                .attr('y', -margin.left + 30)
-                .attr('x', -height / 2)
-                .attr('text-anchor', 'middle')
-                .style('font-size', '16px')
-                .style('font-weight', 'bold');
-
-            svg.append('text')
-                .attr('class', 'y-axis-label-right')
-                .attr('transform', 'rotate(-90)')
-                .attr('y', width + margin.right - 20)
-                .attr('x', -height / 2)
-                .attr('text-anchor', 'middle')
-                .style('font-size', '16px')
-                .style('font-weight', 'bold');
-
-            svg.append('text')
-                .attr('class', 'x-axis-label')
-                .attr('x', width / 2)
-                .attr('y', height + margin.bottom - 10)
-                .attr('text-anchor', 'middle')
-                .style('font-size', '16px')
-                .style('font-weight', 'bold')
-                .text('Time');
-
             svg.select('.y-axis-label-left').text(currentDataType === 'cases' ? 'New Cases' : 'New Deaths').style('fill', currentDataType === 'cases' ? 'blue' : 'red');
             svg.select('.y-axis-label-right').text('Cumulative Vaccinations').style('fill', 'green');
 
@@ -607,16 +580,14 @@ function initScene4() {
                 .attr("class", "line left-line")
                 .attr("fill", "none")
                 .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
-                .attr("stroke-width", 2)
-                .attr("d", lineLeft);
+                .attr("stroke-width", 2);
 
             const rightPath = svg.append("path")
                 .datum(plotData)
                 .attr("class", "line right-line")
                 .attr("fill", "none")
                 .attr("stroke", "green")
-                .attr("stroke-width", 2)
-                .attr("d", lineRight);
+                .attr("stroke-width", 2);
 
             const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
 
@@ -647,16 +618,14 @@ function initScene4() {
                             .attr("class", "line left-remaining-line")
                             .attr("fill", "none")
                             .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
-                            .attr("stroke-width", 2)
-                            .attr("d", lineLeft);
+                            .attr("stroke-width", 2);
 
                         const rightRemainingPath = svg.append("path")
                             .datum(remainingData)
                             .attr("class", "line right-remaining-line")
                             .attr("fill", "none")
                             .attr("stroke", "green")
-                            .attr("stroke-width", 2)
-                            .attr("d", lineRight);
+                            .attr("stroke-width", 2);
 
                         leftRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
                             const length = this.getTotalLength();
@@ -678,6 +647,64 @@ function initScene4() {
             const scales = updateScales(countryData);
             updateLines(scales, countryData);
         }
+
+        function initializeAxes() {
+            // Create empty scales for axes
+            const xScale = d3.scaleTime().range([0, width]);
+            const yScaleLeft = d3.scaleLinear().range([height, 0]);
+            const yScaleRight = d3.scaleLinear().range([height, 0]);
+
+            const yAxisLeft = d3.axisLeft(yScaleLeft).ticks(10);
+            const yAxisRight = d3.axisRight(yScaleRight).ticks(10);
+            const xAxis = d3.axisBottom(xScale);
+
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", `translate(0,${height})`)
+                .call(xAxis);
+
+            svg.append("g")
+                .attr("class", "y-axis y-left")
+                .call(yAxisLeft);
+
+            svg.append("g")
+                .attr("class", "y-axis y-right")
+                .attr("transform", `translate(${width},0)`)
+                .call(yAxisRight);
+
+            svg.append('text')
+                .attr('class', 'y-axis-label-left')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 30)
+                .attr('x', -height / 2)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold');
+
+            svg.append('text')
+                .attr('class', 'y-axis-label-right')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', width + margin.right - 20)
+                .attr('x', -height / 2)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold');
+
+            svg.append('text')
+                .attr('class', 'x-axis-label')
+                .attr('x', width / 2)
+                .attr('y', height + margin.bottom - 10)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold')
+                .text('Time');
+
+            svg.select('.y-axis-label-left').text('New Cases').style('fill', 'blue');
+            svg.select('.y-axis-label-right').text('Cumulative Vaccinations').style('fill', 'green');
+        }
+
+        // Initialize axes on load
+        initializeAxes();
 
         // Region select change event
         d3.select("#region-select").on("change", function () {
@@ -703,33 +730,5 @@ function initScene4() {
             d3.select(this).classed('active', true);
             updateVisualization();
         });
-
-        // Initial setup
-        svg.append('text')
-            .attr('class', 'y-axis-label-left')
-            .attr('transform', 'rotate(-90)')
-            .attr('y', -margin.left + 30)
-            .attr('x', -height / 2)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '16px')
-            .style('font-weight', 'bold');
-
-        svg.append('text')
-            .attr('class', 'y-axis-label-right')
-            .attr('transform', 'rotate(-90)')
-            .attr('y', width + margin.right - 20)
-            .attr('x', -height / 2)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '16px')
-            .style('font-weight', 'bold');
-
-        svg.append('text')
-            .attr('class', 'x-axis-label')
-            .attr('x', width / 2)
-            .attr('y', height + margin.bottom - 10)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '16px')
-            .style('font-weight', 'bold')
-            .text('Time');
     });
 }
