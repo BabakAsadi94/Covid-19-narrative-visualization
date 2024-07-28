@@ -571,8 +571,12 @@ function initScene4() {
             svg.selectAll(".line").remove(); // Ensure only two lines are present at any time
             svg.selectAll(".annotation").remove(); // Remove previous annotations
 
+            // Filter data to plot only until the first non-zero cumulative vaccination
+            const plotData = countryData.filter(d => d.cum_one_vax_dose === 0);
+            const remainingData = countryData.filter(d => d.cum_one_vax_dose > 0);
+
             const leftPath = svg.append("path")
-                .datum(countryData)
+                .datum(plotData)
                 .attr("class", "line left-line")
                 .attr("fill", "none")
                 .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
@@ -584,7 +588,7 @@ function initScene4() {
                 });
 
             const rightPath = svg.append("path")
-                .datum(countryData)
+                .datum(plotData)
                 .attr("class", "line right-line")
                 .attr("fill", "none")
                 .attr("stroke", "green")
@@ -653,7 +657,7 @@ function initScene4() {
                             const length = this.getTotalLength();
                             return d3.interpolateString(`0,${length}`, `${length},${length}`);
                         });
-                    }, 2000);
+                    }, 2000); // Delay before drawing the remaining lines
                 }
             });
         }
@@ -748,6 +752,7 @@ function initScene4() {
         });
     });
 }
+
 
 
            
