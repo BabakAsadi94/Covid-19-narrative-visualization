@@ -59,10 +59,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     }));
 
     // Scene 1: New Cases and Cumulative Cases Visualization
-    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1200).attr("height", 600);
+    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1200).attr("height", 500).style("margin", "0 auto").style("display", "block");
     const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
     const width1 = 1200 - margin1.left - margin1.right;
-    const height1 = 600 - margin1.top - margin1.bottom;
+    const height1 = 500 - margin1.top - margin1.bottom;
 
     let isLogScale1 = false;
     const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width1]);
@@ -75,12 +75,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     let yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10);
     const xAxis1 = d3.axisBottom(xScale1);
 
-    const g1 = svg1.append("g").attr("transform", `translate(${margin1.left},${margin1.top})`);
-    g1.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height1})`).call(xAxis1);
-    g1.append("g").attr("class", "y-axis y-left").call(yAxisLeft1);
-    g1.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width1},0)`).call(yAxisRight1);
+    svg1.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height1})`).call(xAxis1);
+    svg1.append("g").attr("class", "y-axis y-left").call(yAxisLeft1);
+    svg1.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width1},0)`).call(yAxisRight1);
 
-    g1.append('text')
+    svg1.append('text')
         .attr('class', 'y-axis-label-left')
         .attr('transform', 'rotate(-90)')
         .attr('y', -margin1.left + 30)
@@ -91,7 +90,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         .style('fill', 'blue')
         .text('New Cases');
 
-    g1.append('text')
+    svg1.append('text')
         .attr('class', 'y-axis-label-right')
         .attr('transform', 'rotate(-90)')
         .attr('y', width1 + margin1.right - 20)
@@ -102,7 +101,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         .style('fill', 'steelblue')
         .text('Cumulative Cases');
 
-    g1.append('text')
+    svg1.append('text')
         .attr('class', 'x-axis-label')
         .attr('x', width1 / 2)
         .attr('y', height1 + margin1.bottom - 10)
@@ -114,11 +113,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     let lineNewCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleLeft1(d.covid_cases)).curve(d3.curveMonotoneX);
     let lineCumCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleRight1(d.cum_covid_cases)).curve(d3.curveMonotoneX);
 
-    const pathNewCases1 = g1.append("path").datum(countryData).attr("class", "line new-cases")
+    const pathNewCases1 = svg1.append("path").datum(countryData).attr("class", "line new-cases")
         .attr("fill", "none").attr("stroke", "blue").attr("stroke-dasharray", "5,5")
         .attr("stroke-width", 2).attr("d", lineNewCases1).attr("opacity", 0);
 
-    const pathCumCases1 = g1.append("path").datum(countryData).attr("class", "line cum-cases")
+    const pathCumCases1 = svg1.append("path").datum(countryData).attr("class", "line cum-cases")
         .attr("fill", "none").attr("stroke", "steelblue").attr("stroke-width", 2)
         .attr("d", lineCumCases1).attr("opacity", 0);
 
@@ -130,8 +129,8 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         yAxisLeft1 = d3.axisLeft(yScaleLeft1).ticks(10, isLogScale1 ? ".1s" : "");
         yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10, isLogScale1 ? ".1s" : "");
 
-        g1.select(".y-left").transition().duration(500).call(yAxisLeft1);
-        g1.select(".y-right").transition().duration(500).call(yAxisRight1);
+        svg1.select(".y-left").transition().duration(500).call(yAxisLeft1);
+        svg1.select(".y-right").transition().duration(500).call(yAxisRight1);
 
         lineNewCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleLeft1(d.covid_cases)).curve(d3.curveMonotoneX);
         lineCumCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleRight1(d.cum_covid_cases)).curve(d3.curveMonotoneX);
@@ -147,13 +146,13 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     const tooltip1 = d3.select('body').append('div').attr('class', 'tooltip');
 
     function addHover1(path, yScale, dataKey, color) {
-        const focus = g1.append('g').attr('class', 'focus').style('display', 'none');
+        const focus = svg1.append('g').attr('class', 'focus').style('display', 'none');
         focus.append('circle').attr('r', 4.5).attr('fill', color);
         focus.append('rect').attr('class', 'tooltip-background').attr('width', 150).attr('height', 50).attr('x', 10).attr('y', -22)
             .attr('rx', 4).attr('ry', 4).attr('fill', 'lightsteelblue').style('opacity', 0.9);
         focus.append('text').attr('class', 'tooltip-text').attr('x', 18).attr('y', -2).attr('dy', '.35em');
 
-        g1.selectAll('.dot' + dataKey).data(countryData).enter().append('circle').attr('class', 'dot' + dataKey)
+        svg1.selectAll('.dot' + dataKey).data(countryData).enter().append('circle').attr('class', 'dot' + dataKey)
             .attr('cx', d => xScale1(d.date)).attr('cy', d => yScale(d[dataKey])).attr('r', 4).attr('fill', color).attr('opacity', 0)
             .on('mouseover', function (event, d) {
                 d3.select(this).attr('opacity', 1);
@@ -211,10 +210,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 2: New Deaths and Cumulative Deaths Visualization
-    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 600);
+    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 500).style("margin", "0 auto").style("display", "block");
     const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
     const width2 = 1200 - margin2.left - margin2.right;
-    const height2 = 600 - margin2.top - margin2.bottom;
+    const height2 = 500 - margin2.top - margin2.bottom;
 
     let isLogScale2 = false;
     const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width2]);
@@ -227,12 +226,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     let yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
     const xAxis2 = d3.axisBottom(xScale2);
 
-    const g2 = svg2.append("g").attr("transform", `translate(${margin2.left},${margin2.top})`);
-    g2.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height2})`).call(xAxis2);
-    g2.append("g").attr("class", "y-axis y-left").call(yAxisLeft2);
-    g2.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width2},0)`).call(yAxisRight2);
+    svg2.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height2})`).call(xAxis2);
+    svg2.append("g").attr("class", "y-axis y-left").call(yAxisLeft2);
+    svg2.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width2},0)`).call(yAxisRight2);
 
-    g2.append('text')
+    svg2.append('text')
         .attr('class', 'y-axis-label-left')
         .attr('transform', 'rotate(-90)')
         .attr('y', -margin2.left + 50)
@@ -243,7 +241,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         .style('fill', 'red')
         .text('New Deaths');
 
-    g2.append('text')
+    svg2.append('text')
         .attr('class', 'y-axis-label-right')
         .attr('transform', 'rotate(-90)')
         .attr('y', width2 + margin2.right + 0)
@@ -254,7 +252,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         .style('fill', 'darkred')
         .text('Cumulative Deaths');
 
-    g2.append('text')
+    svg2.append('text')
         .attr('class', 'x-axis-label')
         .attr('x', width2 / 2)
         .attr('y', height2 + margin2.bottom - 10)
@@ -266,11 +264,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     let lineNewDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleLeft2(d.covid_deaths)).curve(d3.curveMonotoneX);
     let lineCumDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleRight2(d.cum_covid_deaths)).curve(d3.curveMonotoneX);
 
-    const pathNewDeaths2 = g2.append("path").datum(countryData).attr("class", "line new-deaths")
+    const pathNewDeaths2 = svg2.append("path").datum(countryData).attr("class", "line new-deaths")
         .attr("fill", "none").attr("stroke", "red").attr("stroke-dasharray", "5,5")
         .attr("stroke-width", 2).attr("d", lineNewDeaths2).attr("opacity", 0);
 
-    const pathCumDeaths2 = g2.append("path").datum(countryData).attr("class", "line cum-deaths")
+    const pathCumDeaths2 = svg2.append("path").datum(countryData).attr("class", "line cum-deaths")
         .attr("fill", "none").attr("stroke", "darkred").attr("stroke-width", 2)
         .attr("d", lineCumDeaths2).attr("opacity", 0);
 
@@ -282,8 +280,8 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10, isLogScale2 ? ".1s" : "");
         yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10, isLogScale2 ? ".1s" : "");
 
-        g2.select(".y-left").transition().duration(500).call(yAxisLeft2);
-        g2.select(".y-right").transition().duration(500).call(yAxisRight2);
+        svg2.select(".y-left").transition().duration(500).call(yAxisLeft2);
+        svg2.select(".y-right").transition().duration(500).call(yAxisRight2);
 
         lineNewDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleLeft2(d.covid_deaths)).curve(d3.curveMonotoneX);
         lineCumDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleRight2(d.cum_covid_deaths)).curve(d3.curveMonotoneX);
@@ -299,13 +297,13 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     const tooltip2 = d3.select('body').append('div').attr('class', 'tooltip');
 
     function addHover2(path, yScale, dataKey, color) {
-        const focus = g2.append('g').attr('class', 'focus').style('display', 'none');
+        const focus = svg2.append('g').attr('class', 'focus').style('display', 'none');
         focus.append('circle').attr('r', 4.5).attr('fill', color);
         focus.append('rect').attr('class', 'tooltip-background').attr('width', 150).attr('height', 50).attr('x', 10).attr('y', -22)
             .attr('rx', 4).attr('ry', 4).attr('fill', 'lightsteelblue').style('opacity', 0.9);
         focus.append('text').attr('class', 'tooltip-text').attr('x', 18).attr('y', -2).attr('dy', '.35em');
 
-        g2.selectAll('.dot' + dataKey).data(countryData).enter().append('circle').attr('class', 'dot' + dataKey)
+        svg2.selectAll('.dot' + dataKey).data(countryData).enter().append('circle').attr('class', 'dot' + dataKey)
             .attr('cx', d => xScale2(d.date)).attr('cy', d => yScale(d[dataKey])).attr('r', 4).attr('fill', color).attr('opacity', 0)
             .on('mouseover', function (event, d) {
                 d3.select(this).attr('opacity', 1);
@@ -363,9 +361,9 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 3: State-wise Cases and Deaths
-    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1080).attr("height", 540);
+    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1200).attr("height", 540).style("margin", "0 auto").style("display", "block");
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
-    const width3 = 1080 - margin3.left - margin3.right;
+    const width3 = 1200 - margin3.left - margin3.right;
     const height3 = 540 - margin3.top - margin3.bottom;
     const xScale3 = d3.scaleBand().range([0, width3]).padding(0.1);
     const yScale3 = d3.scaleLinear().range([height3, 0]);
