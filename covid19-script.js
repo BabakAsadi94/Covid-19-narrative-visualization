@@ -10,6 +10,7 @@ function navigate(offset) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    scenes.forEach(scene => scene.style.display = 'none');
     scenes[currentScene].style.display = 'block';
 });
 
@@ -49,25 +50,22 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     }));
 
     // Scene 1: New Cases and Cumulative Cases Visualization
-    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1200).attr("height", 500);
+    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 800).attr("height", 500)
+        .attr("viewBox", "0 0 800 500").attr("preserveAspectRatio", "xMidYMid meet");
     const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
-    const width1 = 1200 - margin1.left - margin1.right;
+    const width1 = 800 - margin1.left - margin1.right;
     const height1 = 500 - margin1.top - margin1.bottom;
 
     let isLogScale1 = false;
     const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width1]);
-    let yScaleLeft1 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_cases)]).range([height1, 0]);
-    let yScaleRight1 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_cases)]).range([height1, 0]);
-    const yScaleLeftLog1 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_cases)]).range([height1, 0]);
-    const yScaleRightLog1 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_cases)]).range([height1, 0]);
+    let yScaleLeft1 = d3.scaleLinear().range([height1, 0]);
+    let yScaleRight1 = d3.scaleLinear().range([height1, 0]);
+    const yScaleLeftLog1 = d3.scaleLog().range([height1, 0]);
+    const yScaleRightLog1 = d3.scaleLog().range([height1, 0]);
 
-    let yAxisLeft1 = d3.axisLeft(yScaleLeft1).ticks(10);
-    let yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10);
-    const xAxis1 = d3.axisBottom(xScale1);
-
-    svg1.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height1})`).call(xAxis1);
-    svg1.append("g").attr("class", "y-axis y-left").call(yAxisLeft1);
-    svg1.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width1},0)`).call(yAxisRight1);
+    const yAxisLeft1 = svg1.append("g").attr("class", "y-axis y-left").attr("transform", `translate(${margin1.left},0)`);
+    const yAxisRight1 = svg1.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width1 + margin1.left},0)`);
+    const xAxis1 = svg1.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height1})`);
 
     svg1.append('text')
         .attr('class', 'y-axis-label-left')
@@ -100,98 +98,50 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         .style('font-weight', 'bold')
         .text('Time');
 
-    let lineNewCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleLeft1(d.covid_cases)).curve(d3.curveMonotoneX);
-    let lineCumCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleRight1(d.cum_covid_cases)).curve(d3.curveMonotoneX);
+    function updateScales1(dataType) {
+        const yDomainLeft = dataType === 'cum_covid_cases' || dataType === 'both' ?
+            [1, d3.max(countryData, d => d.cum_covid_cases)] :
+            [1, d3.max(countryData, d => d.covid_cases)];
 
-    const pathNewCases1 = svg1.append("path").datum(countryData).attr("class", "line new-cases")
-        .attr("fill", "none").attr("stroke", "blue").attr("stroke-dasharray", "5,5")
-        .attr("stroke-width", 2).attr("d", lineNewCases1).attr("opacity", 0);
+        const yDomainRight = [1, d3.max(countryData, d => d.cum_covid_cases)];
 
-    const pathCumCases1 = svg1.append("path").datum(countryData).attr("class", "line cum-cases")
-        .attr("fill", "none").attr("stroke", "steelblue").attr("stroke-width", 2)
-        .attr("d", lineCumCases1).attr("opacity", 0);
+        yScaleLeft1.domain(yDomainLeft);
+        yScaleRight1.domain(yDomainRight);
+        yScaleLeftLog1.domain(yDomainLeft);
+        yScaleRightLog1.domain(yDomainRight);
+    }
 
     function toggleScale1() {
         isLogScale1 = !isLogScale1;
-        yScaleLeft1 = isLogScale1 ? yScaleLeftLog1 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_cases)]).range([height1, 0]);
-        yScaleRight1 = isLogScale1 ? yScaleRightLog1 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_cases)]).range([height1, 0]);
-
-        yAxisLeft1 = d3.axisLeft(yScaleLeft1).ticks(10, isLogScale1 ? ".1s" : "");
-        yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10, isLogScale1 ? ".1s" : "");
-
-        svg1.select(".y-left").transition().duration(500).call(yAxisLeft1);
-        svg1.select(".y-right").transition().duration(500).call(yAxisRight1);
-
-        lineNewCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleLeft1(d.covid_cases)).curve(d3.curveMonotoneX);
-        lineCumCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleRight1(d.cum_covid_cases)).curve(d3.curveMonotoneX);
-
-        pathNewCases1.transition().duration(500).attr("d", lineNewCases1);
-        pathCumCases1.transition().duration(500).attr("d", lineCumCases1);
-
-        updateHover1();
+        updateScales1('both');
+        yAxisLeft1.transition().duration(500).call(d3.axisLeft(isLogScale1 ? yScaleLeftLog1 : yScaleLeft1).ticks(10));
+        yAxisRight1.transition().duration(500).call(d3.axisRight(isLogScale1 ? yScaleRightLog1 : yScaleRight1).ticks(10));
+        updateVisualization1(d3.select('#scene1 .button-group .active').attr('data-type'));
     }
 
     d3.select("#scene1 #switch-y-axis").on("click", toggleScale1);
 
-    const tooltip1 = d3.select('body').append('div').attr('class', 'tooltip');
-
-    function addHover1(path, yScale, dataKey, color) {
-        const focus = svg1.append('g').attr('class', 'focus').style('display', 'none');
-        focus.append('circle').attr('r', 4.5).attr('fill', color);
-        focus.append('rect').attr('class', 'tooltip-background').attr('width', 150).attr('height', 50).attr('x', 10).attr('y', -22)
-            .attr('rx', 4).attr('ry', 4).attr('fill', 'lightsteelblue').style('opacity', 0.9);
-        focus.append('text').attr('class', 'tooltip-text').attr('x', 18).attr('y', -2).attr('dy', '.35em');
-
-        svg1.selectAll('.dot' + dataKey).data(countryData).enter().append('circle').attr('class', 'dot' + dataKey)
-            .attr('cx', d => xScale1(d.date)).attr('cy', d => yScale(d[dataKey])).attr('r', 4).attr('fill', color).attr('opacity', 0)
-            .on('mouseover', function (event, d) {
-                d3.select(this).attr('opacity', 1);
-                tooltip1.transition().duration(200).style('opacity', .9);
-                tooltip1.html(`Date: ${d3.timeFormat("%b %d, %Y")(d.date)}<br>${dataKey.replace('_', ' ')}: ${d[dataKey]}`)
-                    .style('left', (event.pageX + 5) + 'px').style('top', (event.pageY - 28) + 'px');
-            }).on('mouseout', function () {
-                d3.select(this).attr('opacity', 0);
-                tooltip1.transition().duration(500).style('opacity', 0);
-            });
-    }
-
-    function updateHover1() {
-        d3.selectAll('.dotcovid_cases').remove();
-        d3.selectAll('.dotcum_covid_cases').remove();
-        addHover1(pathNewCases1, yScaleLeft1, 'covid_cases', 'blue');
-        addHover1(pathCumCases1, yScaleRight1, 'cum_covid_cases', 'steelblue');
-    }
-
     function updateVisualization1(dataType) {
-        d3.selectAll('#scene1 .button-group button').attr('disabled', true);
-        pathNewCases1.attr("opacity", 0);
-        pathCumCases1.attr("opacity", 0);
+        updateScales1(dataType);
 
-        if (dataType === 'covid_cases') {
-            pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
-        } else if (dataType === 'cum_covid_cases') {
-            pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
-        } else {
-            pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            });
-            pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
-        }
+        const lineNewCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleLeft1(d.covid_cases)).curve(d3.curveMonotoneX);
+        const lineCumCases1 = d3.line().x(d => xScale1(d.date)).y(d => yScaleRight1(d.cum_covid_cases)).curve(d3.curveMonotoneX);
 
-        updateHover1();
+        yAxisLeft1.call(d3.axisLeft(isLogScale1 ? yScaleLeftLog1 : yScaleLeft1).ticks(10));
+        yAxisRight1.call(d3.axisRight(isLogScale1 ? yScaleRightLog1 : yScaleRight1).ticks(10));
+        xAxis1.call(d3.axisBottom(xScale1));
+
+        svg1.selectAll(".line.new-cases").data([countryData])
+            .join("path").attr("class", "line new-cases")
+            .attr("fill", "none").attr("stroke", "blue").attr("stroke-dasharray", "5,5")
+            .attr("stroke-width", 2).attr("d", lineNewCases1).attr("opacity", dataType === 'covid_cases' || dataType === 'both' ? 1 : 0);
+
+        svg1.selectAll(".line.cum-cases").data([countryData])
+            .join("path").attr("class", "line cum-cases")
+            .attr("fill", "none").attr("stroke", "steelblue")
+            .attr("stroke-width", 2).attr("d", lineCumCases1).attr("opacity", dataType === 'cum_covid_cases' || dataType === 'both' ? 1 : 0);
     }
 
-    updateVisualization1('both');
     d3.selectAll('#scene1 .button-group button[data-type]').on('click', function () {
         const dataType = d3.select(this).attr('data-type');
         d3.selectAll('#scene1 .button-group button[data-type]').classed('active', false);
@@ -200,30 +150,27 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 2: New Deaths and Cumulative Deaths Visualization
-    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 500);
-    const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
-    const width2 = 1200 - margin2.left - margin2.right;
+    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 800).attr("height", 500)
+        .attr("viewBox", "0 0 800 500").attr("preserveAspectRatio", "xMidYMid meet");
+    const margin2 = { top: 20, right: 100, bottom: 60, left: 100 };
+    const width2 = 800 - margin2.left - margin2.right;
     const height2 = 500 - margin2.top - margin2.bottom;
 
     let isLogScale2 = false;
     const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width2]);
-    let yScaleLeft2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height2, 0]);
-    let yScaleRight2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height2, 0]);
-    const yScaleLeftLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_deaths)]).range([height2, 0]);
-    const yScaleRightLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_deaths)]).range([height2, 0]);
+    let yScaleLeft2 = d3.scaleLinear().range([height2, 0]);
+    let yScaleRight2 = d3.scaleLinear().range([height2, 0]);
+    const yScaleLeftLog2 = d3.scaleLog().range([height2, 0]);
+    const yScaleRightLog2 = d3.scaleLog().range([height2, 0]);
 
-    let yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10);
-    let yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
-    const xAxis2 = d3.axisBottom(xScale2);
-
-    svg2.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height2})`).call(xAxis2);
-    svg2.append("g").attr("class", "y-axis y-left").call(yAxisLeft2);
-    svg2.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width2},0)`).call(yAxisRight2);
+    const yAxisLeft2 = svg2.append("g").attr("class", "y-axis y-left").attr("transform", `translate(${margin2.left},0)`);
+    const yAxisRight2 = svg2.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width2 + margin2.left},0)`);
+    const xAxis2 = svg2.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height2})`);
 
     svg2.append('text')
         .attr('class', 'y-axis-label-left')
         .attr('transform', 'rotate(-90)')
-        .attr('y', -margin2.left + 50)
+        .attr('y', -margin2.left + 30)
         .attr('x', -height2 / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '16px')
@@ -234,7 +181,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     svg2.append('text')
         .attr('class', 'y-axis-label-right')
         .attr('transform', 'rotate(-90)')
-        .attr('y', width2 + margin2.right + 0)
+        .attr('y', width2 + margin2.right - 20)
         .attr('x', -height2 / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '16px')
@@ -251,98 +198,50 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         .style('font-weight', 'bold')
         .text('Time');
 
-    let lineNewDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleLeft2(d.covid_deaths)).curve(d3.curveMonotoneX);
-    let lineCumDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleRight2(d.cum_covid_deaths)).curve(d3.curveMonotoneX);
+    function updateScales2(dataType) {
+        const yDomainLeft = dataType === 'cum_covid_deaths' || dataType === 'both' ?
+            [1, d3.max(countryData, d => d.cum_covid_deaths)] :
+            [1, d3.max(countryData, d => d.covid_deaths)];
 
-    const pathNewDeaths2 = svg2.append("path").datum(countryData).attr("class", "line new-deaths")
-        .attr("fill", "none").attr("stroke", "red").attr("stroke-dasharray", "5,5")
-        .attr("stroke-width", 2).attr("d", lineNewDeaths2).attr("opacity", 0);
+        const yDomainRight = [1, d3.max(countryData, d => d.cum_covid_deaths)];
 
-    const pathCumDeaths2 = svg2.append("path").datum(countryData).attr("class", "line cum-deaths")
-        .attr("fill", "none").attr("stroke", "darkred").attr("stroke-width", 2)
-        .attr("d", lineCumDeaths2).attr("opacity", 0);
+        yScaleLeft2.domain(yDomainLeft);
+        yScaleRight2.domain(yDomainRight);
+        yScaleLeftLog2.domain(yDomainLeft);
+        yScaleRightLog2.domain(yDomainRight);
+    }
 
     function toggleScale2() {
         isLogScale2 = !isLogScale2;
-        yScaleLeft2 = isLogScale2 ? yScaleLeftLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height2, 0]);
-        yScaleRight2 = isLogScale2 ? yScaleRightLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height2, 0]);
-
-        yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10, isLogScale2 ? ".1s" : "");
-        yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10, isLogScale2 ? ".1s" : "");
-
-        svg2.select(".y-left").transition().duration(500).call(yAxisLeft2);
-        svg2.select(".y-right").transition().duration(500).call(yAxisRight2);
-
-        lineNewDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleLeft2(d.covid_deaths)).curve(d3.curveMonotoneX);
-        lineCumDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleRight2(d.cum_covid_deaths)).curve(d3.curveMonotoneX);
-
-        pathNewDeaths2.transition().duration(500).attr("d", lineNewDeaths2);
-        pathCumDeaths2.transition().duration(500).attr("d", lineCumDeaths2);
-
-        updateHover2();
+        updateScales2('both');
+        yAxisLeft2.transition().duration(500).call(d3.axisLeft(isLogScale2 ? yScaleLeftLog2 : yScaleLeft2).ticks(10));
+        yAxisRight2.transition().duration(500).call(d3.axisRight(isLogScale2 ? yScaleRightLog2 : yScaleRight2).ticks(10));
+        updateVisualization2(d3.select('#scene2 .button-group .active').attr('data-type'));
     }
 
     d3.select("#scene2 #switch-y-axis").on("click", toggleScale2);
 
-    const tooltip2 = d3.select('body').append('div').attr('class', 'tooltip');
-
-    function addHover2(path, yScale, dataKey, color) {
-        const focus = svg2.append('g').attr('class', 'focus').style('display', 'none');
-        focus.append('circle').attr('r', 4.5).attr('fill', color);
-        focus.append('rect').attr('class', 'tooltip-background').attr('width', 150).attr('height', 50).attr('x', 10).attr('y', -22)
-            .attr('rx', 4).attr('ry', 4).attr('fill', 'lightsteelblue').style('opacity', 0.9);
-        focus.append('text').attr('class', 'tooltip-text').attr('x', 18).attr('y', -2).attr('dy', '.35em');
-
-        svg2.selectAll('.dot' + dataKey).data(countryData).enter().append('circle').attr('class', 'dot' + dataKey)
-            .attr('cx', d => xScale2(d.date)).attr('cy', d => yScale(d[dataKey])).attr('r', 4).attr('fill', color).attr('opacity', 0)
-            .on('mouseover', function (event, d) {
-                d3.select(this).attr('opacity', 1);
-                tooltip2.transition().duration(200).style('opacity', .9);
-                tooltip2.html(`Date: ${d3.timeFormat("%b %d, %Y")(d.date)}<br>${dataKey.replace('_', ' ')}: ${d[dataKey]}`)
-                    .style('left', (event.pageX + 5) + 'px').style('top', (event.pageY - 28) + 'px');
-            }).on('mouseout', function () {
-                d3.select(this).attr('opacity', 0);
-                tooltip2.transition().duration(500).style('opacity', 0);
-            });
-    }
-
-    function updateHover2() {
-        d3.selectAll('.dotcovid_deaths').remove();
-        d3.selectAll('.dotcum_covid_deaths').remove();
-        addHover2(pathNewDeaths2, yScaleLeft2, 'covid_deaths', 'red');
-        addHover2(pathCumDeaths2, yScaleRight2, 'cum_covid_deaths', 'darkred');
-    }
-
     function updateVisualization2(dataType) {
-        d3.selectAll('#scene2 .button-group button').attr('disabled', true);
-        pathNewDeaths2.attr("opacity", 0);
-        pathCumDeaths2.attr("opacity", 0);
+        updateScales2(dataType);
 
-        if (dataType === 'covid_deaths') {
-            pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
-        } else if (dataType === 'cum_covid_deaths') {
-            pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
-        } else {
-            pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            });
-            pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
-                const length = this.getTotalLength();
-                return d3.interpolateString("0," + length, length + "," + length);
-            }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
-        }
+        const lineNewDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleLeft2(d.covid_deaths)).curve(d3.curveMonotoneX);
+        const lineCumDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleRight2(d.cum_covid_deaths)).curve(d3.curveMonotoneX);
 
-        updateHover2();
+        yAxisLeft2.call(d3.axisLeft(isLogScale2 ? yScaleLeftLog2 : yScaleLeft2).ticks(10));
+        yAxisRight2.call(d3.axisRight(isLogScale2 ? yScaleRightLog2 : yScaleRight2).ticks(10));
+        xAxis2.call(d3.axisBottom(xScale2));
+
+        svg2.selectAll(".line.new-deaths").data([countryData])
+            .join("path").attr("class", "line new-deaths")
+            .attr("fill", "none").attr("stroke", "red").attr("stroke-dasharray", "5,5")
+            .attr("stroke-width", 2).attr("d", lineNewDeaths2).attr("opacity", dataType === 'covid_deaths' || dataType === 'both' ? 1 : 0);
+
+        svg2.selectAll(".line.cum-deaths").data([countryData])
+            .join("path").attr("class", "line cum-deaths")
+            .attr("fill", "none").attr("stroke", "darkred")
+            .attr("stroke-width", 2).attr("d", lineCumDeaths2).attr("opacity", dataType === 'cum_covid_deaths' || dataType === 'both' ? 1 : 0);
     }
 
-    updateVisualization2('both');
     d3.selectAll('#scene2 .button-group button[data-type]').on('click', function () {
         const dataType = d3.select(this).attr('data-type');
         d3.selectAll('#scene2 .button-group button[data-type]').classed('active', false);
@@ -351,10 +250,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 3: State-wise Cases and Deaths
-    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1080).attr("height", 540);
+    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1080).attr("height", 700)
+        .attr("viewBox", "0 0 1080 700").attr("preserveAspectRatio", "xMidYMid meet");
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
     const width3 = 1080 - margin3.left - margin3.right;
-    const height3 = 540 - margin3.top - margin3.bottom;
+    const height3 = 700 - margin3.top - margin3.bottom;
     const xScale3 = d3.scaleBand().range([0, width3]).padding(0.1);
     const yScale3 = d3.scaleLinear().range([height3, 0]);
 
@@ -459,11 +359,13 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         stateSelect4.append("option").attr("value", d.state).text(d.state);
     });
 
-    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 600).attr("height", 400);
-    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 600).attr("height", 400);
+    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 800).attr("height", 400)
+        .attr("viewBox", "0 0 800 400").attr("preserveAspectRatio", "xMidYMid meet");
+    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 800).attr("height", 400)
+        .attr("viewBox", "0 0 800 400").attr("preserveAspectRatio", "xMidYMid meet");
 
     const margin4 = { top: 20, right: 30, bottom: 50, left: 60 };
-    const width4 = 600 - margin4.left - margin4.right;
+    const width4 = 800 - margin4.left - margin4.right;
     const height4 = 400 - margin4.top - margin4.bottom;
 
     const xScale4 = d3.scaleTime().range([0, width4]);
