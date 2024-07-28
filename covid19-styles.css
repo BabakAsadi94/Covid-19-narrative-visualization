@@ -6,11 +6,8 @@ body {
 }
 
 .intro, .scene {
+    display: none;
     padding: 20px;
-}
-
-.intro {
-    display: block;
 }
 
 .scene {
@@ -36,27 +33,20 @@ body {
     border-radius: 8px;
 }
 
-.button-group button:hover {
-    background-color: #45a049;
+.button-group .blue {
+    background-color: blue;
 }
 
-.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 120px;
-    height: auto;
-    padding: 5px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s;
+.button-group .red {
+    background-color: red;
+}
+
+.button-group button:hover {
+    opacity: 0.8;
 }
 
 .nav-buttons {
-    text-align: left;
+    text-align: center;
     margin-top: 20px;
 }
 
@@ -78,7 +68,7 @@ body {
     background-color: #0056b3;
 }
 
-.chart-container, .container {
+.chart-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,7 +76,7 @@ body {
 }
 
 .chart {
-    width: 85%;
+    width: 90%;
     height: 540px;
     margin: 20px 0;
 }
