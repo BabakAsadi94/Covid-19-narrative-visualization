@@ -1,4 +1,3 @@
-// script.js
 let currentScene = 0;
 const scenes = document.querySelectorAll('.scene');
 
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initScene1();
     initScene2();
     initScene3();
-    initScene4();
 });
 
 function initScene1() {
@@ -278,7 +276,7 @@ function initScene2() {
             updateHover2();
         }
 
-        d3.select("#scene2 #switch-y-axis").on("click", toggleScale2);
+        d3.select("#scene2 #switch-y-axis-deaths").on("click", toggleScale2);
 
         const tooltip2 = d3.select('body').append('div').attr('class', 'tooltip');
 
@@ -471,161 +469,5 @@ function initScene3() {
             .enter().append("span").text(d => d3.timeFormat("%B %d, %Y")(d));
 
         updateSliderLabel3(0);
-    });
-}
-
-function initScene4() {
-    d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
-        const stateDataByDate = d3.rollups(
-            data,
-            v => ({
-                covid_cases: d3.sum(v, d => +d.covid_cases),
-                covid_deaths: d3.sum(v, d => +d.covid_deaths),
-                one_vax_dose: d3.sum(v, d => +d.one_vax_dose)
-            }),
-            d => d.state,
-            d => d.date
-        );
-
-        const stateData = stateDataByDate.map(([state, values]) => ({
-            state,
-            data: values.map(([date, value]) => ({
-                date: new Date(date),
-                covid_cases: value.covid_cases,
-                covid_deaths: value.covid_deaths,
-                one_vax_dose: value.one_vax_dose
-            }))
-        }));
-
-        const stateSelect4 = d3.select("#scene4 #state-select");
-        stateData.forEach(d => {
-            stateSelect4.append("option").attr("value", d.state).text(d.state);
-        });
-
-        const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 600).attr("height", 400);
-        const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 600).attr("height", 400);
-
-        const margin4 = { top: 20, right: 30, bottom: 50, left: 60 };
-        const width4 = 600 - margin4.left - margin4.right;
-        const height4 = 400 - margin4.top - margin4.bottom;
-
-        const xScale4 = d3.scaleTime().range([0, width4]);
-        const yScaleCases4 = d3.scaleLinear().range([height4, 0]);
-        const yScaleDeaths4 = d3.scaleLinear().range([height4, 0]);
-
-        const xAxis4 = d3.axisBottom(xScale4);
-        const yAxisCases4 = d3.axisLeft(yScaleCases4).ticks(6);
-        const yAxisDeaths4 = d3.axisLeft(yScaleDeaths4).ticks(6);
-
-        svgCases4.append("g").attr("transform", `translate(0,${height4})`).attr("class", "x-axis");
-        svgCases4.append("g").attr("class", "y-axis");
-
-        svgDeaths4.append("g").attr("transform", `translate(0,${height4})`).attr("class", "x-axis");
-        svgDeaths4.append("g").attr("class", "y-axis");
-
-        svgCases4.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)')
-            .attr('y', -margin4.left + 15).attr('x', -height4 / 2).attr('text-anchor', 'middle')
-            .style('font-size', '16px').style('font-weight', 'bold').text('New Cases');
-
-        svgDeaths4.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)')
-            .attr('y', -margin4.left + 20).attr('x', -height4 / 2).attr('text-anchor', 'middle')
-            .style('font-size', '16px').style('font-weight', 'bold').text('New Deaths');
-
-        function updateChart4(selectedState) {
-            const stateDataFiltered = stateData.find(d => d.state === selectedState);
-            if (!stateDataFiltered) return;
-
-            const data = stateDataFiltered.data;
-            const peakCases = d3.max(data, d => d.covid_cases);
-            const peakDateCases = data.find(d => d.covid_cases === peakCases).date;
-
-            const peakDeaths = d3.max(data, d => d.covid_deaths);
-            const peakDateDeaths = data.find(d => d.covid_deaths === peakDeaths).date;
-
-            const firstVaxDate = data.find(d => d.one_vax_dose > 0);
-
-            xScale4.domain(d3.extent(data, d => d.date));
-            yScaleCases4.domain([0, peakCases]).nice();
-            yScaleDeaths4.domain([0, peakDeaths]).nice();
-
-            d3.selectAll("#scene4 .x-axis").transition().duration(1000).call(xAxis4);
-            svgCases4.select(".y-axis").transition().duration(1000).call(yAxisCases4);
-            svgDeaths4.select(".y-axis").transition().duration(1000).call(yAxisDeaths4);
-
-            const lineCases4 = d3.line().x(d => xScale4(d.date)).y(d => yScaleCases4(d.covid_cases));
-            const lineDeaths4 = d3.line().x(d => xScale4(d.date)).y(d => yScaleDeaths4(d.covid_deaths));
-
-            svgCases4.selectAll(".line").remove();
-            svgCases4.append("path").datum(data).attr("class", "line").attr("fill", "none")
-                .attr("stroke", "blue").attr("stroke-width", 2).attr("d", lineCases4)
-                .attr("opacity", 0).transition().duration(1000).attr("opacity", 1);
-
-            svgDeaths4.selectAll(".line").remove();
-            svgDeaths4.append("path").datum(data).attr("class", "line").attr("fill", "none")
-                .attr("stroke", "red").attr("stroke-width", 2).attr("d", lineDeaths4)
-                .attr("opacity", 0).transition().duration(1000).attr("opacity", 1);
-
-            setTimeout(() => {
-                svgCases4.selectAll(".annotation").remove();
-                svgCases4.append("circle").attr("class", "annotation").attr("cx", xScale4(peakDateCases))
-                    .attr("cy", yScaleCases4(peakCases)).attr("r", 5).attr("fill", "blue");
-
-                svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateCases) + 15)
-                    .attr("y", yScaleCases4(peakCases)).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold").text(`Peak New Cases`);
-
-                svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateCases) + 15)
-                    .attr("y", yScaleCases4(peakCases) + 15).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold")
-                    .text(`${d3.timeFormat("%B %d, %Y")(peakDateCases)}: ${peakCases}`);
-
-                if (firstVaxDate) {
-                    svgCases4.append("circle").attr("class", "annotation").attr("cx", xScale4(firstVaxDate.date))
-                        .attr("cy", yScaleCases4(firstVaxDate.covid_cases)).attr("r", 10).attr("fill", "green");
-
-                    svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                        .attr("y", yScaleCases4(firstVaxDate.covid_cases)).attr("alignment-baseline", "middle")
-                        .style("font-size", "12px").style("font-weight", "bold").text(`Vaccinations Started:`);
-
-                    svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                        .attr("y", yScaleCases4(firstVaxDate.covid_cases) + 15).attr("alignment-baseline", "middle")
-                        .style("font-size", "12px").style("font-weight", "bold")
-                        .text(`${d3.timeFormat("%B %d, %Y")(firstVaxDate.date)}`);
-                }
-
-                svgDeaths4.selectAll(".annotation").remove();
-                svgDeaths4.append("circle").attr("class", "annotation").attr("cx", xScale4(peakDateDeaths))
-                    .attr("cy", yScaleDeaths4(peakDeaths)).attr("r", 5).attr("fill", "red");
-
-                svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateDeaths) + 15)
-                    .attr("y", yScaleDeaths4(peakDeaths)).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold").text(`Peak New Deaths`);
-
-                svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateDeaths) + 15)
-                    .attr("y", yScaleDeaths4(peakDeaths) + 15).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold")
-                    .text(`${d3.timeFormat("%B %d, %Y")(peakDateDeaths)}: ${peakDeaths}`);
-
-                if (firstVaxDate) {
-                    svgDeaths4.append("circle").attr("class", "annotation").attr("cx", xScale4(firstVaxDate.date))
-                        .attr("cy", yScaleDeaths4(firstVaxDate.covid_deaths)).attr("r", 10).attr("fill", "green");
-
-                    svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                        .attr("y", yScaleDeaths4(firstVaxDate.covid_deaths)).attr("alignment-baseline", "middle")
-                        .style("font-size", "12px").style("font-weight", "bold").text(`Vaccinations Started:`);
-
-                    svgDeaths4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                        .attr("y", yScaleDeaths4(firstVaxDate.covid_deaths) + 15).attr("alignment-baseline", "middle")
-                        .style("font-size", "12px").style("font-weight", "bold")
-                        .text(`${d3.timeFormat("%B %d, %Y")(firstVaxDate.date)}`);
-                }
-            }, 1000);
-        }
-
-        updateChart4(stateData[0].state);
-        d3.select("#scene4 #state-select").on('change', function () {
-            const selectedState = d3.select(this).property("value");
-            updateChart4(selectedState);
-        });
     });
 }
