@@ -6,12 +6,6 @@
     <link rel="stylesheet" href="covid19-styles.css">
 </head>
 <body>
-    <div class="intro" id="intro">
-        <h1>Covid Data Visualization in the US</h1>
-        <p>This is a narrative visualization for Covid-19 data in the United States. Explore the different scenes to understand the trends and impact of the pandemic.</p>
-        <button class="nav-button" onclick="navigateTo(1)">Start Visualization</button>
-    </div>
-
     <div class="scene" id="scene1">
         <div class="nav-buttons">
             <button class="nav-button" onclick="navigate(-1)">Previous</button>
@@ -70,8 +64,10 @@
                 <label for="state-select">Select a State:</label>
                 <select id="state-select"></select>
             </div>
-            <div id="chart-cases" class="chart"></div>
-            <div id="chart-deaths" class="chart"></div>
+            <div class="row">
+                <div id="chart-cases" class="chart"></div>
+                <div id="chart-deaths" class="chart"></div>
+            </div>
         </div>
     </div>
 
