@@ -58,10 +58,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     }));
 
     // Scene 1: New Cases and Cumulative Cases Visualization
-    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 800).attr("height", 500);
+    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1200).attr("height", 600);
     const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
-    const width1 = 800 - margin1.left - margin1.right;
-    const height1 = 500 - margin1.top - margin1.bottom;
+    const width1 = 1200 - margin1.left - margin1.right;
+    const height1 = 600 - margin1.top - margin1.bottom;
 
     let isLogScale1 = false;
     const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width1]);
@@ -209,10 +209,10 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 2: New Deaths and Cumulative Deaths Visualization
-    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 800).attr("height", 500);
-    const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
-    const width2 = 800 - margin2.left - margin2.right;
-    const height2 = 500 - margin2.top - margin2.bottom;
+    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 600);
+    const margin2 = { top: 20, right: 100, bottom: 60, left: 100 };
+    const width2 = 1200 - margin2.left - margin2.right;
+    const height2 = 600 - margin2.top - margin2.bottom;
 
     let isLogScale2 = false;
     const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width2]);
@@ -232,7 +232,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     svg2.append('text')
         .attr('class', 'y-axis-label-left')
         .attr('transform', 'rotate(-90)')
-        .attr('y', -margin2.left + 50)
+        .attr('y', -margin2.left + 30)
         .attr('x', -height2 / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '16px')
@@ -243,7 +243,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     svg2.append('text')
         .attr('class', 'y-axis-label-right')
         .attr('transform', 'rotate(-90)')
-        .attr('y', width2 + margin2.right + 0)
+        .attr('y', width2 + margin2.right - 20)
         .attr('x', -height2 / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '16px')
@@ -291,7 +291,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         updateHover2();
     }
 
-    d3.select("#scene2 #switch-y-axis").on("click", toggleScale2);
+    d3.select("#scene2 #switch-y-axis-deaths").on("click", toggleScale2);
 
     const tooltip2 = d3.select('body').append('div').attr('class', 'tooltip');
 
@@ -430,141 +430,80 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         });
     }
 
-    updateChart3('cases', 0);
-    d3.selectAll('#scene3 .button-group button').on('click', function () {
-        const dataType = d3.select(this).attr('data-type');
-        d3.selectAll('#scene3 .button-group button').classed('active', false);
-        d3.select(this).classed('active', true);
-        const timeIndex = d3.select("#time-slider").property("value");
-        updateChart3(dataType, timeIndex);
-        updateSliderLabel3(timeIndex);
+    let selectedType3 = 'cases';
+    let timeIndex3 = 0;
+
+    updateChart3(selectedType3, timeIndex3);
+    document.getElementById('cases-btn').addEventListener('click', () => {
+        selectedType3 = 'cases';
+        updateChart3(selectedType3, timeIndex3);
+    });
+    document.getElementById('deaths-btn').addEventListener('click', () => {
+        selectedType3 = 'deaths';
+        updateChart3(selectedType3, timeIndex3);
+    });
+    document.getElementById('time-slider').addEventListener('input', function () {
+        timeIndex3 = +this.value;
+        document.getElementById('slider-label').textContent = `Date: ${d3.timeFormat("%B %d, %Y")(countryData[timeIndex3].date)}`;
+        updateChart3(selectedType3, timeIndex3);
     });
 
-    d3.select("#scene3 #time-slider").on("input", function () {
-        const timeIndex = +this.value;
-        const dataType = d3.select("#scene3 .button-group button.active").attr("data-type");
-        updateChart3(dataType, timeIndex);
-        updateSliderLabel3(timeIndex);
-    });
-
-    function updateSliderLabel3(timeIndex) {
-        const date = stateData[0].data[timeIndex].date;
-        d3.select("#scene3 #slider-label").text(`Date: ${d3.timeFormat("%B %d, %Y")(date)}`);
-    }
-
-    const timeSlider3 = d3.select("#scene3 #time-slider");
-    timeSlider3.attr("max", stateData[0].data.length - 1);
-
-    const sliderLabels3 = d3.select("#scene3 .slider-labels");
-    sliderLabels3.selectAll("span")
-        .data([stateData[0].data[0].date, stateData[0].data[Math.floor(stateData[0].data.length / 2)].date, stateData[0].data[stateData[0].data.length - 1].date])
-        .enter().append("span").text(d => d3.timeFormat("%B %d, %Y")(d));
-
-    updateSliderLabel3(0);
-
-    // Scene 4: State-wise New Cases and New Deaths Visualization
-    const stateSelect4 = d3.select("#scene4 #state-select");
+    // Scene 4: State-wise Cases and Deaths by Time
+    const stateSelect = document.getElementById('state-select');
     stateData.forEach(d => {
-        stateSelect4.append("option").attr("value", d.state).text(d.state);
+        const option = document.createElement('option');
+        option.value = d.state;
+        option.text = d.state;
+        stateSelect.add(option);
     });
 
-    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 800).attr("height", 400);
-    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 800).attr("height", 400);
+    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 1080).attr("height", 540);
+    const marginCases4 = { top: 20, right: 200, bottom: 100, left: 60 };
+    const widthCases4 = 1080 - marginCases4.left - marginCases4.right;
+    const heightCases4 = 540 - marginCases4.top - marginCases4.bottom;
+    const xScaleCases4 = d3.scaleTime().range([0, widthCases4]);
+    const yScaleCases4 = d3.scaleLinear().range([heightCases4, 0]);
 
-    const margin4 = { top: 20, right: 30, bottom: 50, left: 60 };
-    const width4 = 800 - margin4.left - margin4.right;
-    const height4 = 400 - margin4.top - margin4.bottom;
+    const xAxisCases4 = svgCases4.append("g").attr("class", "x-axis").attr("transform", `translate(0,${heightCases4})`);
+    const yAxisCases4 = svgCases4.append("g").attr("class", "y-axis");
 
-    const xScale4 = d3.scaleTime().range([0, width4]);
-    const yScaleCases4 = d3.scaleLinear().range([height4, 0]);
-    const yScaleDeaths4 = d3.scaleLinear().range([height4, 0]);
+    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 1080).attr("height", 540);
+    const marginDeaths4 = { top: 20, right: 200, bottom: 100, left: 60 };
+    const widthDeaths4 = 1080 - marginDeaths4.left - marginDeaths4.right;
+    const heightDeaths4 = 540 - marginDeaths4.top - marginDeaths4.bottom;
+    const xScaleDeaths4 = d3.scaleTime().range([0, widthDeaths4]);
+    const yScaleDeaths4 = d3.scaleLinear().range([heightDeaths4, 0]);
 
-    const xAxis4 = d3.axisBottom(xScale4);
-    const yAxisCases4 = d3.axisLeft(yScaleCases4).ticks(6);
-    const yAxisDeaths4 = d3.axisLeft(yScaleDeaths4).ticks(6);
+    const xAxisDeaths4 = svgDeaths4.append("g").attr("class", "x-axis").attr("transform", `translate(0,${heightDeaths4})`);
+    const yAxisDeaths4 = svgDeaths4.append("g").attr("class", "y-axis");
 
-    svgCases4.append("g").attr("transform", `translate(0,${height4})`).attr("class", "x-axis");
-    svgCases4.append("g").attr("class", "y-axis");
+    function updateCharts4(state) {
+        const stateDataFiltered = stateData.find(d => d.state === state).data;
+        xScaleCases4.domain(d3.extent(stateDataFiltered, d => d.date));
+        yScaleCases4.domain([0, d3.max(stateDataFiltered, d => d.covid_cases)]).nice();
+        xAxisCases4.transition().duration(1000).call(d3.axisBottom(xScaleCases4).tickFormat(d3.timeFormat("%B %Y")));
+        yAxisCases4.transition().duration(1000).call(d3.axisLeft(yScaleCases4).ticks(10));
 
-    svgDeaths4.append("g").attr("transform", `translate(0,${height4})`).attr("class", "x-axis");
-    svgDeaths4.append("g").attr("class", "y-axis");
+        xScaleDeaths4.domain(d3.extent(stateDataFiltered, d => d.date));
+        yScaleDeaths4.domain([0, d3.max(stateDataFiltered, d => d.covid_deaths)]).nice();
+        xAxisDeaths4.transition().duration(1000).call(d3.axisBottom(xScaleDeaths4).tickFormat(d3.timeFormat("%B %Y")));
+        yAxisDeaths4.transition().duration(1000).call(d3.axisLeft(yScaleDeaths4).ticks(10));
 
-    svgCases4.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)')
-        .attr('y', -margin4.left + 15).attr('x', -height4 / 2).attr('text-anchor', 'middle')
-        .style('font-size', '16px').style('font-weight', 'bold').text('New Cases');
-
-    svgDeaths4.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)')
-        .attr('y', -margin4.left + 20).attr('x', -height4 / 2).attr('text-anchor', 'middle')
-        .style('font-size', '16px').style('font-weight', 'bold').text('New Deaths');
-
-    function updateChart4(selectedState) {
-        const stateDataFiltered = stateData.find(d => d.state === selectedState);
-        if (!stateDataFiltered) return;
-
-        const data = stateDataFiltered.data;
-        const peakCases = d3.max(data, d => d.covid_cases);
-        const peakDateCases = data.find(d => d.covid_cases === peakCases).date;
-
-        const peakDeaths = d3.max(data, d => d.covid_deaths);
-        const peakDateDeaths = data.find(d => d.covid_deaths === peakDeaths).date;
-
-        const firstVaxDate = data.find(d => d.one_vax_dose > 0);
-
-        xScale4.domain(d3.extent(data, d => d.date));
-        yScaleCases4.domain([0, peakCases]).nice();
-        yScaleDeaths4.domain([0, peakDeaths]).nice();
-
-        d3.selectAll("#scene4 .x-axis").transition().duration(1000).call(xAxis4);
-        svgCases4.select(".y-axis").transition().duration(1000).call(yAxisCases4);
-        svgDeaths4.select(".y-axis").transition().duration(1000).call(yAxisDeaths4);
-
-        const lineCases4 = d3.line().x(d => xScale4(d.date)).y(d => yScaleCases4(d.covid_cases));
-        const lineDeaths4 = d3.line().x(d => xScale4(d.date)).y(d => yScaleDeaths4(d.covid_deaths));
+        const lineCases = d3.line().x(d => xScaleCases4(d.date)).y(d => yScaleCases4(d.covid_cases)).curve(d3.curveMonotoneX);
+        const lineDeaths = d3.line().x(d => xScaleDeaths4(d.date)).y(d => yScaleDeaths4(d.covid_deaths)).curve(d3.curveMonotoneX);
 
         svgCases4.selectAll(".line").remove();
-        svgCases4.append("path").datum(data).attr("class", "line").attr("fill", "none")
-            .attr("stroke", "blue").attr("stroke-width", 2).attr("d", lineCases4)
-            .attr("opacity", 0).transition().duration(1000).attr("opacity", 1);
+        svgCases4.append("path").datum(stateDataFiltered).attr("class", "line")
+            .attr("fill", "none").attr("stroke", "blue").attr("stroke-width", 2).attr("d", lineCases);
 
         svgDeaths4.selectAll(".line").remove();
-        svgDeaths4.append("path").datum(data).attr("class", "line").attr("fill", "none")
-            .attr("stroke", "red").attr("stroke-width", 2).attr("d", lineDeaths4)
-            .attr("opacity", 0).transition().duration(1000).attr("opacity", 1);
-
-        setTimeout(() => {
-            svgCases4.selectAll(".annotation").remove();
-            svgCases4.append("circle").attr("class", "annotation").attr("cx", xScale4(peakDateCases))
-                .attr("cy", yScaleCases4(peakCases)).attr("r", 5).attr("fill", "blue");
-
-            svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateCases) + 15)
-                .attr("y", yScaleCases4(peakCases)).attr("alignment-baseline", "middle")
-                .style("font-size", "12px").style("font-weight", "bold").text(`Peak New Cases`);
-
-            svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(peakDateCases) + 15)
-                .attr("y", yScaleCases4(peakCases) + 15).attr("alignment-baseline", "middle")
-                .style("font-size", "12px").style("font-weight", "bold")
-                .text(`${d3.timeFormat("%B %d, %Y")(peakDateCases)}: ${peakCases}`);
-
-            if (firstVaxDate) {
-                svgCases4.append("circle").attr("class", "annotation").attr("cx", xScale4(firstVaxDate.date))
-                    .attr("cy", yScaleCases4(firstVaxDate.covid_cases)).attr("r", 10).attr("fill", "green");
-
-                svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                    .attr("y", yScaleCases4(firstVaxDate.covid_cases)).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold").text(`Vaccinations Started:`);
-
-                svgCases4.append("text").attr("class", "annotation").attr("x", xScale4(firstVaxDate.date) + 15)
-                    .attr("y", yScaleCases4(firstVaxDate.covid_cases) + 15).attr("alignment-baseline", "middle")
-                    .style("font-size", "12px").style("font-weight", "bold")
-                    .text(`${d3.timeFormat("%B %d, %Y")(firstVaxDate.date)}`);
-            }
-        }, 1000);
+        svgDeaths4.append("path").datum(stateDataFiltered).attr("class", "line")
+            .attr("fill", "none").attr("stroke", "red").attr("stroke-width", 2).attr("d", lineDeaths);
     }
 
-    stateSelect4.on("change", function () {
-        const selectedState = d3.select(this).property("value");
-        updateChart4(selectedState);
+    stateSelect.addEventListener('change', function () {
+        updateCharts4(this.value);
     });
 
-    updateChart4(stateSelect4.property("value"));
+    updateCharts4(stateSelect.value);
 });
