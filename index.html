@@ -6,19 +6,19 @@
     <link rel="stylesheet" href="covid19-styles.css">
 </head>
 <body>
-    <div class="intro">
+    <div class="intro scene" id="intro">
         <h1>Covid19 Narrative Visualization</h1>
         <p class="intro-text">Welcome to the Covid19 Narrative Visualization. This visualization is divided into four scenes:</p>
-        <p class="scene-description">Scene 1: Visualizes new and cumulative COVID-19 cases over time. Users can toggle between new cases, cumulative cases, or both, and switch the y-axis between linear and logarithmic scales.</p>
-        <p class="scene-description">Scene 2: Focuses on new and cumulative COVID-19 deaths. Users can view new deaths, cumulative deaths, or both, with the option to switch the y-axis between linear and logarithmic scales.</p>
-        <p class="scene-description">Scene 3: Provides a state-wise comparison of COVID-19 cases and deaths over time. Users can use a slider to view specific dates and toggle between cases and deaths to see the most affected states.</p>
-        <p class="scene-description">Scene 4: Allows users to visualize the evolution of COVID-19 cases, deaths, and cumulative vaccinations nationwide or by state, highlighting key events like the start of vaccinations. Users can switch between cases and deaths data.</p>
+        <p>Scene 1: Visualizes new and cumulative COVID-19 cases over time. Users can toggle between new cases, cumulative cases, or both, and switch the y-axis between linear and logarithmic scales.</p>
+        <p>Scene 2: Focuses on new and cumulative COVID-19 deaths. Users can view new deaths, cumulative deaths, or both, with the option to switch the y-axis between linear and logarithmic scales.</p>
+        <p>Scene 3: Provides a state-wise comparison of COVID-19 cases and deaths over time. Users can use a slider to view specific dates and toggle between cases and deaths to see the most affected states.</p>
+        <p>Scene 4: Allows users to visualize the evolution of COVID-19 cases, deaths, and cumulative vaccinations nationwide or by state, highlighting key events like the start of vaccinations. Users can switch between cases and deaths data.</p>
         <button onclick="navigateToScenes()">Start Visualization</button>
     </div>
 
     <div class="scene" id="scene1">
         <div class="nav-buttons">
-            <button class="nav-button prev" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button previous" onclick="navigate(-1)">Previous</button>
             <button class="nav-button next" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
@@ -32,7 +32,7 @@
 
     <div class="scene" id="scene2">
         <div class="nav-buttons">
-            <button class="nav-button prev" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button previous" onclick="navigate(-1)">Previous</button>
             <button class="nav-button next" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
@@ -46,7 +46,7 @@
 
     <div class="scene" id="scene3">
         <div class="nav-buttons">
-            <button class="nav-button prev" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button previous" onclick="navigate(-1)">Previous</button>
             <button class="nav-button next" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
@@ -65,7 +65,7 @@
 
     <div class="scene" id="scene4">
         <div class="nav-buttons">
-            <button class="nav-button prev" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button previous" onclick="navigate(-1)">Previous</button>
             <button class="nav-button next" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
