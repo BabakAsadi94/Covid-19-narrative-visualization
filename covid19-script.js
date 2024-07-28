@@ -355,7 +355,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 2000).attr("height", 450);
     
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
-    const width3 = 800 - margin3.left - margin3.right;
+    const width3 = 2000 - margin3.left - margin3.right;
     const height3 = 450 - margin3.top - margin3.bottom;
     const xScale3 = d3.scaleBand().range([0, width3]).padding(0.1);
     const yScale3 = d3.scaleLinear().range([height3, 0]);
