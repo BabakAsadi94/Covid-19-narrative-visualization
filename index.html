@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Covid Data Visualization</title>
-    <link rel="stylesheet" href="covid19-styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="scene" id="scene1">
@@ -28,8 +28,8 @@
         <div class="button-group">
             <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
             <button id="cumulative-deaths-btn" data-type="cum_covid_deaths">Cumulative Deaths</button>
-            <button id="both-deaths-btn" data-type="both">Both</button>
-            <button id="switch-y-axis-deaths">Switch Y-Axis</button>
+            <button id="both-btn" data-type="both">Both</button>
+            <button id="switch-y-axis">Switch Y-Axis</button>
         </div>
         <div id="visualization2"></div>
     </div>
@@ -75,6 +75,6 @@
     </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="covid19-script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
