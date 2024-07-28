@@ -549,6 +549,33 @@ function initScene4() {
                 .attr("transform", `translate(${width},0)`)
                 .call(yAxisRight);
 
+            svg.append('text')
+                .attr('class', 'y-axis-label-left')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 30)
+                .attr('x', -height / 2)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold');
+
+            svg.append('text')
+                .attr('class', 'y-axis-label-right')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', width + margin.right - 20)
+                .attr('x', -height / 2)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold');
+
+            svg.append('text')
+                .attr('class', 'x-axis-label')
+                .attr('x', width / 2)
+                .attr('y', height + margin.bottom - 10)
+                .attr('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold')
+                .text('Time');
+
             svg.select('.y-axis-label-left').text(currentDataType === 'cases' ? 'New Cases' : 'New Deaths').style('fill', currentDataType === 'cases' ? 'blue' : 'red');
             svg.select('.y-axis-label-right').text('Cumulative Vaccinations').style('fill', 'green');
 
@@ -571,11 +598,8 @@ function initScene4() {
             svg.selectAll(".line").remove(); // Ensure only two lines are present at any time
             svg.selectAll(".annotation").remove(); // Remove previous annotations
 
-            // Initially, do not plot any lines
-            const plotData = [];
-
             const leftPath = svg.append("path")
-                .datum(plotData)
+                .datum(countryData)
                 .attr("class", "line left-line")
                 .attr("fill", "none")
                 .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
@@ -583,70 +607,35 @@ function initScene4() {
                 .attr("d", lineLeft);
 
             const rightPath = svg.append("path")
-                .datum(plotData)
+                .datum(countryData)
                 .attr("class", "line right-line")
                 .attr("fill", "none")
                 .attr("stroke", "green")
                 .attr("stroke-width", 2)
                 .attr("d", lineRight);
 
-            function drawLines() {
-                leftPath.datum(countryData)
-                    .transition().duration(4000).attr("d", lineLeft).attr("opacity", 1);
+            leftPath.transition().duration(4000).attrTween("stroke-dasharray", function () {
+                const length = this.getTotalLength();
+                return d3.interpolateString("0," + length, length + "," + length);
+            });
 
-                rightPath.datum(countryData)
-                    .transition().duration(4000).attr("d", lineRight).attr("opacity", 1).on("end", () => {
-                        const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
-
-                        if (firstVaxDate) {
-                            svg.append("text")
-                                .attr("class", "annotation")
-                                .attr("x", xScale(firstVaxDate.date))
-                                .attr("y", yScaleRight(firstVaxDate.cum_one_vax_dose))
-                                .attr("dy", -10)
-                                .attr("text-anchor", "middle")
-                                .style("font-size", "12px")
-                                .style("font-weight", "bold")
-                                .style("fill", "green")
-                                .text("Vaccinations Started");
-
-                            const remainingData = countryData.filter(d => d.date > firstVaxDate.date);
-
-                            const leftRemainingPath = svg.append("path")
-                                .datum(remainingData)
-                                .attr("class", "line left-remaining-line")
-                                .attr("fill", "none")
-                                .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
-                                .attr("stroke-width", 2)
-                                .attr("d", lineLeft);
-
-                            const rightRemainingPath = svg.append("path")
-                                .datum(remainingData)
-                                .attr("class", "line right-remaining-line")
-                                .attr("fill", "none")
-                                .attr("stroke", "green")
-                                .attr("stroke-width", 2)
-                                .attr("d", lineRight);
-
-                            leftRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
-                                const length = this.getTotalLength();
-                                return d3.interpolateString("0," + length, length + "," + length);
-                            });
-
-                            rightRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
-                                const length = this.getTotalLength();
-                                return d3.interpolateString("0," + length, length + "," + length);
-                            });
-                        }
-                    });
-            }
-
-            // Attach event listener to buttons to draw lines on selection
-            d3.selectAll('#scene4 .button-group button[data-type]').on('click', function () {
-                currentDataType = d3.select(this).attr('data-type');
-                d3.selectAll('#scene4 .button-group button[data-type]').classed('active', false);
-                d3.select(this).classed('active', true);
-                drawLines();
+            rightPath.transition().duration(4000).attrTween("stroke-dasharray", function () {
+                const length = this.getTotalLength();
+                return d3.interpolateString("0," + length, length + "," + length);
+            }).on("end", () => {
+                const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
+                if (firstVaxDate) {
+                    svg.append("text")
+                        .attr("class", "annotation")
+                        .attr("x", xScale(firstVaxDate.date))
+                        .attr("y", yScaleRight(firstVaxDate.cum_one_vax_dose))
+                        .attr("dy", -10)
+                        .attr("text-anchor", "middle")
+                        .style("font-size", "12px")
+                        .style("font-weight", "bold")
+                        .style("fill", "green")
+                        .text("Vaccinations Started");
+                }
             });
         }
 
@@ -671,6 +660,14 @@ function initScene4() {
         // State select change event
         d3.select("#state-select").on("change", function () {
             currentState = this.value;
+            updateVisualization();
+        });
+
+        // Button actions
+        d3.selectAll('#scene4 .button-group button[data-type]').on('click', function () {
+            currentDataType = d3.select(this).attr('data-type');
+            d3.selectAll('#scene4 .button-group button[data-type]').classed('active', false);
+            d3.select(this).classed('active', true);
             updateVisualization();
         });
 
@@ -701,8 +698,5 @@ function initScene4() {
             .style('font-size', '16px')
             .style('font-weight', 'bold')
             .text('Time');
-
-        // Initial visualization setup
-        updateVisualization();
     });
 }
