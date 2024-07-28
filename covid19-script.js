@@ -1,6 +1,5 @@
 let currentScene = 0;
 const scenes = document.querySelectorAll('.scene');
-const intro = document.getElementById('intro');
 
 function navigate(offset) {
     scenes[currentScene].style.display = 'none';
@@ -10,15 +9,7 @@ function navigate(offset) {
     scenes[currentScene].style.display = 'block';
 }
 
-function navigateTo(sceneIndex) {
-    intro.style.display = 'none';
-    scenes[currentScene].style.display = 'none';
-    currentScene = sceneIndex;
-    scenes[currentScene].style.display = 'block';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    intro.style.display = 'block';
     scenes.forEach(scene => scene.style.display = 'none');
     scenes[currentScene].style.display = 'block';
 });
