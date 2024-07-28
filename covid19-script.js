@@ -659,10 +659,10 @@ function initScene4() {
                 }
             });
 
-            addHoverEffects(svg, plotData, lineLeft, lineRight, xScale, yScaleLeft, yScaleRight);
+            addHoverEffects(svg, countryData, xScale, yScaleLeft, yScaleRight);
         }
 
-        function addHoverEffects(svg, plotData, lineLeft, lineRight, xScale, yScaleLeft, yScaleRight) {
+        function addHoverEffects(svg, countryData, xScale, yScaleLeft, yScaleRight) {
             const tooltip = d3.select('body').append('div')
                 .attr('class', 'tooltip')
                 .style('opacity', 0);
@@ -703,9 +703,9 @@ function initScene4() {
                 })
                 .on('mousemove', function (event) {
                     const x0 = xScale.invert(d3.pointer(event, this)[0]);
-                    const i = bisectDate(plotData, x0, 1);
-                    const d0 = plotData[i - 1];
-                    const d1 = plotData[i];
+                    const i = bisectDate(countryData, x0, 1);
+                    const d0 = countryData[i - 1];
+                    const d1 = countryData[i];
                     const d = x0 - d0.date > d1.date - x0 ? d1 : d0;
 
                     hoverLineLeft
@@ -812,5 +812,6 @@ function initScene4() {
         });
     });
 }
+
 
            
