@@ -23,6 +23,7 @@ body {
 }
 
 .button-group button {
+    background-color: #4CAF50;
     border: none;
     color: white;
     padding: 10px 24px;
@@ -35,8 +36,16 @@ body {
     border-radius: 8px;
 }
 
+#scene1 .button-group button {
+    background-color: blue;
+}
+
+#scene2 .button-group button {
+    background-color: red;
+}
+
 .button-group button:hover {
-    opacity: 0.8;
+    background-color: #45a049;
 }
 
 .tooltip {
