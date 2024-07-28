@@ -375,6 +375,7 @@ function initScene2() {
 }
 
 
+
 function initScene3() {
     d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
         const stateDataByDate = d3.rollups(
