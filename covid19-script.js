@@ -621,8 +621,6 @@ function initScene4() {
                         .style("fill", "green")
                         .text("Vaccinations Started");
 
-                    const remainingData = countryData.filter(d => d.date > firstVaxDate.date);
-
                     setTimeout(() => {
                         const leftRemainingPath = svg.append("path")
                             .datum(remainingData)
@@ -752,6 +750,7 @@ function initScene4() {
         });
     });
 }
+
 
 
 
