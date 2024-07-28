@@ -217,11 +217,11 @@ function initScene2() {
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
         let isLogScale2 = false;
-        const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width]);
+        let xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width]);
         let yScaleLeft2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
         let yScaleRight2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
-        const yScaleLeftLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
-        const yScaleRightLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
+        let yScaleLeftLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
+        let yScaleRightLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
 
         let yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10);
         let yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
@@ -285,11 +285,12 @@ function initScene2() {
 
         function toggleScale2() {
             isLogScale2 = !isLogScale2;
+
             yScaleLeft2 = isLogScale2 ? yScaleLeftLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
             yScaleRight2 = isLogScale2 ? yScaleRightLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
 
-            yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10, isLogScale2 ? ".1s" : "");
-            yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10, isLogScale2 ? ".1s" : "");
+            yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10);
+            yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
 
             svg2.select(".y-left").transition().duration(500).call(yAxisLeft2);
             svg2.select(".y-right").transition().duration(500).call(yAxisRight2);
@@ -328,8 +329,8 @@ function initScene2() {
         }
 
         function updateHover2() {
-            d3.selectAll('.dotcovid_deaths').remove();
-            d3.selectAll('.dotcum_covid_deaths').remove();
+            svg2.selectAll('.dotnew-deaths').remove();
+            svg2.selectAll('.dotcum-deaths').remove();
             addHover2(pathNewDeaths2, yScaleLeft2, 'covid_deaths', 'red');
             addHover2(pathCumDeaths2, yScaleRight2, 'cum_covid_deaths', 'darkred');
         }
@@ -340,21 +341,21 @@ function initScene2() {
             pathCumDeaths2.attr("opacity", 0);
 
             if (dataType === 'covid_deaths') {
-                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
                 }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
             } else if (dataType === 'cum_covid_deaths') {
-                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
                 }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
             } else {
-                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
                 });
-                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
                 }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
@@ -373,7 +374,6 @@ function initScene2() {
         updateVisualization2('covid_deaths'); // Initial visualization
     });
 }
-
 
 
 
