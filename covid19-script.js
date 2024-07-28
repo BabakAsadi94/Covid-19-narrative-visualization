@@ -658,6 +658,68 @@ function initScene4() {
                     }, 2000); // Delay before drawing the remaining lines
                 }
             });
+
+            addHoverEffects(svg, plotData, lineLeft, lineRight, xScale, yScaleLeft, yScaleRight);
+        }
+
+        function addHoverEffects(svg, plotData, lineLeft, lineRight, xScale, yScaleLeft, yScaleRight) {
+            const tooltip = d3.select('body').append('div')
+                .attr('class', 'tooltip')
+                .style('opacity', 0);
+
+            const hoverLineLeft = svg.append('line')
+                .attr('class', 'hover-line')
+                .attr('y1', 0)
+                .attr('y2', height)
+                .style('stroke', currentDataType === 'cases' ? 'blue' : 'red')
+                .style('stroke-width', 1)
+                .style('opacity', 0);
+
+            const hoverLineRight = svg.append('line')
+                .attr('class', 'hover-line')
+                .attr('y1', 0)
+                .attr('y2', height)
+                .style('stroke', 'green')
+                .style('stroke-width', 1)
+                .style('opacity', 0);
+
+            const bisectDate = d3.bisector(d => d.date).left;
+
+            svg.append('rect')
+                .attr('class', 'overlay')
+                .attr('width', width)
+                .attr('height', height)
+                .style('fill', 'none')
+                .style('pointer-events', 'all')
+                .on('mouseover', function () {
+                    hoverLineLeft.style('opacity', 1);
+                    hoverLineRight.style('opacity', 1);
+                    tooltip.style('opacity', 1);
+                })
+                .on('mouseout', function () {
+                    hoverLineLeft.style('opacity', 0);
+                    hoverLineRight.style('opacity', 0);
+                    tooltip.style('opacity', 0);
+                })
+                .on('mousemove', function (event) {
+                    const x0 = xScale.invert(d3.pointer(event, this)[0]);
+                    const i = bisectDate(plotData, x0, 1);
+                    const d0 = plotData[i - 1];
+                    const d1 = plotData[i];
+                    const d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+                    hoverLineLeft
+                        .attr('x1', xScale(d.date))
+                        .attr('x2', xScale(d.date));
+
+                    hoverLineRight
+                        .attr('x1', xScale(d.date))
+                        .attr('x2', xScale(d.date));
+
+                    tooltip.html(`Date: ${d3.timeFormat('%B %d, %Y')(d.date)}<br>${currentDataType === 'cases' ? 'New Cases: ' + d.covid_cases : 'New Deaths: ' + d.covid_deaths}<br>Cumulative Vaccinations: ${d.cum_one_vax_dose}`)
+                        .style('left', (d3.pointer(event)[0] + 15) + 'px')
+                        .style('top', (d3.pointer(event)[1] - 28) + 'px');
+                });
         }
 
         function updateVisualization() {
@@ -750,8 +812,5 @@ function initScene4() {
         });
     });
 }
-
-
-
 
            
