@@ -303,7 +303,7 @@ function initScene2() {
             updateHover2();
         }
 
-        d3.select("#scene2 #switch-y-axis").on("click", toggleScale2);
+        d3.select("#scene2 #switch-y-axis-deaths").on("click", toggleScale2);
 
         const tooltip2 = d3.select('body').append('div').attr('class', 'tooltip');
 
@@ -370,9 +370,10 @@ function initScene2() {
             updateVisualization2(dataType);
         });
 
-        updateHover2();
+        updateVisualization2('covid_deaths'); // Initial visualization
     });
 }
+
 
 
 
