@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Covid Data Visualization</title>
-    <link rel="stylesheet" href="covid19-styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="intro" id="intro">
+        <h1>Covid Data Visualization in the US</h1>
+        <p>This is a narrative visualization for Covid-19 data in the United States. Explore the different scenes to understand the trends and impact of the pandemic.</p>
+        <button class="nav-button" onclick="navigateTo(1)">Start Visualization</button>
+    </div>
+
     <div class="scene" id="scene1">
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="navigate(-1)">Previous</button>
-            <button class="nav-button" onclick="navigate(1)">Next</button>
-        </div>
-        <div class="button-group blue-buttons">
+        <div class="button-group">
             <button id="new-cases-btn" data-type="covid_cases">New Cases</button>
             <button id="cumulative-cases-btn" data-type="cum_covid_cases">Cumulative Cases</button>
             <button id="both-btn" data-type="both">Both</button>
             <button id="switch-y-axis">Switch Y-Axis</button>
         </div>
-        <div id="visualization1" class="visualization"></div>
+        <div id="visualization"></div>
     </div>
 
     <div class="scene" id="scene2">
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="navigate(-1)">Previous</button>
-            <button class="nav-button" onclick="navigate(1)">Next</button>
-        </div>
-        <div class="button-group red-buttons">
+        <div class="button-group">
             <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
             <button id="cumulative-deaths-btn" data-type="cum_covid_deaths">Cumulative Deaths</button>
             <button id="both-btn" data-type="both">Both</button>
             <button id="switch-y-axis">Switch Y-Axis</button>
         </div>
-        <div id="visualization2" class="visualization"></div>
+        <div id="visualization"></div>
     </div>
 
     <div class="scene" id="scene3">
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="navigate(-1)">Previous</button>
-            <button class="nav-button" onclick="navigate(1)">Next</button>
-        </div>
         <div class="button-group">
             <button id="cases-btn" class="cases active" data-type="cases">Cases</button>
             <button id="deaths-btn" class="deaths" data-type="deaths">Deaths</button>
@@ -54,24 +48,23 @@
     </div>
 
     <div class="scene" id="scene4">
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="navigate(-1)">Previous</button>
-            <button class="nav-button" onclick="navigate(1)">Next</button>
-        </div>
         <div class="container">
             <div class="header">
                 <h1>Covid Data Visualization by State</h1>
                 <label for="state-select">Select a State:</label>
                 <select id="state-select"></select>
             </div>
-            <div class="row">
-                <div id="chart-cases" class="chart"></div>
-                <div id="chart-deaths" class="chart"></div>
-            </div>
+            <div id="chart-cases" class="chart"></div>
+            <div id="chart-deaths" class="chart"></div>
         </div>
     </div>
 
+    <div class="nav-buttons">
+        <button class="nav-button" id="prev-button" onclick="navigate(-1)">Previous</button>
+        <button class="nav-button" id="next-button" onclick="navigate(1)">Next</button>
+    </div>
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="covid19-script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
