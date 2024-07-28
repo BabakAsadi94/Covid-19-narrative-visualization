@@ -53,6 +53,27 @@
         </div>
     </div>
 
+    <div class="scene" id="scene4">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
+        <div class="button-group">
+            <button id="cases-btn" data-type="cases">Cases</button>
+            <button id="deaths-btn" data-type="deaths">Deaths</button>
+        </div>
+        <div class="select-group">
+            <select id="region-select">
+                <option value="nation">Nation</option>
+                <option value="state">State</option>
+            </select>
+            <select id="state-select" style="display:none;">
+                <!-- State options will be populated dynamically -->
+            </select>
+        </div>
+        <div id="visualization"></div>
+    </div>
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="covid19-script.js"></script>
 </body>
