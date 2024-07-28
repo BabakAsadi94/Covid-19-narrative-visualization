@@ -6,8 +6,11 @@ body {
 }
 
 .intro, .scene {
-    display: none;
     padding: 20px;
+}
+
+.intro {
+    display: block;
 }
 
 .scene {
@@ -20,7 +23,6 @@ body {
 }
 
 .button-group button {
-    background-color: #4CAF50;
     border: none;
     color: white;
     padding: 10px 24px;
@@ -33,20 +35,35 @@ body {
     border-radius: 8px;
 }
 
-.button-group .blue {
+.button-group button#new-cases-btn, .button-group button#cumulative-cases-btn, .button-group button#both-btn, .button-group button#switch-y-axis {
     background-color: blue;
 }
 
-.button-group .red {
+.button-group button#new-deaths-btn, .button-group button#cumulative-deaths-btn, .button-group button#both-btn, .button-group button#switch-y-axis {
     background-color: red;
 }
 
 .button-group button:hover {
-    opacity: 0.8;
+    background-color: #45a049;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 120px;
+    height: auto;
+    padding: 5px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
 }
 
 .nav-buttons {
-    text-align: center;
+    text-align: left;
     margin-top: 20px;
 }
 
@@ -68,7 +85,7 @@ body {
     background-color: #0056b3;
 }
 
-.chart-container {
+.chart-container, .container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,7 +93,7 @@ body {
 }
 
 .chart {
-    width: 90%;
+    width: 85%;
     height: 540px;
     margin: 20px 0;
 }
