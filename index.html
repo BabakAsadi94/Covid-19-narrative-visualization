@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Covid Data Visualization</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="covid19-styles.css">
 </head>
 <body>
     <div class="intro" id="intro">
         <h1>Covid Data Visualization in the US</h1>
         <p>This is a narrative visualization for Covid-19 data in the United States. Explore the different scenes to understand the trends and impact of the pandemic.</p>
-        <button class="nav-button" id="start-visualization-btn">Start Visualization</button>
+        <button class="nav-button" onclick="navigateTo(1)">Start Visualization</button>
     </div>
 
     <div class="scene" id="scene1">
         <div class="nav-buttons">
-            <button class="nav-button" id="prev-button">Previous</button>
-            <button class="nav-button" id="next-button">Next</button>
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
             <button id="new-cases-btn" data-type="covid_cases">New Cases</button>
@@ -28,8 +28,8 @@
 
     <div class="scene" id="scene2">
         <div class="nav-buttons">
-            <button class="nav-button" id="prev-button">Previous</button>
-            <button class="nav-button" id="next-button">Next</button>
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
             <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
@@ -42,8 +42,8 @@
 
     <div class="scene" id="scene3">
         <div class="nav-buttons">
-            <button class="nav-button" id="prev-button">Previous</button>
-            <button class="nav-button" id="next-button">Next</button>
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
             <button id="cases-btn" class="cases active" data-type="cases">Cases</button>
@@ -55,14 +55,14 @@
             <div class="slider-labels"></div>
         </div>
         <div class="chart-container">
-            <div id="chart3" class="chart"></div>
+            <div id="chart" class="chart"></div>
         </div>
     </div>
 
     <div class="scene" id="scene4">
         <div class="nav-buttons">
-            <button class="nav-button" id="prev-button">Previous</button>
-            <button class="nav-button" id="next-button">Next</button>
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
         </div>
         <div class="container">
             <div class="header">
@@ -70,12 +70,12 @@
                 <label for="state-select">Select a State:</label>
                 <select id="state-select"></select>
             </div>
-            <div id="chart-cases4" class="chart"></div>
-            <div id="chart-deaths4" class="chart"></div>
+            <div id="chart-cases" class="chart"></div>
+            <div id="chart-deaths" class="chart"></div>
         </div>
     </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="script.js"></script>
+    <script src="covid19-script.js"></script>
 </body>
 </html>
