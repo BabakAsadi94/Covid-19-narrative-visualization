@@ -50,9 +50,9 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     }));
 
     // Scene 1: New Cases and Cumulative Cases Visualization
-    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1000).attr("height", 500);
+    const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 800).attr("height", 500);
     const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
-    const width1 = 1000 - margin1.left - margin1.right;
+    const width1 = 800 - margin1.left - margin1.right;
     const height1 = 500 - margin1.top - margin1.bottom;
 
     let isLogScale1 = false;
@@ -201,9 +201,9 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 2: New Deaths and Cumulative Deaths Visualization
-    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1000).attr("height", 500);
-    const margin2 = { top: 20, right: 100, bottom: 60, left: 100 };
-    const width2 = 1000 - margin2.left - margin2.right;
+    const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 800).attr("height", 500);
+    const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
+    const width2 = 800 - margin2.left - margin2.right;
     const height2 = 500 - margin2.top - margin2.bottom;
 
     let isLogScale2 = false;
@@ -224,7 +224,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     svg2.append('text')
         .attr('class', 'y-axis-label-left')
         .attr('transform', 'rotate(-90)')
-        .attr('y', -margin2.left + 30)
+        .attr('y', -margin2.left + 50)
         .attr('x', -height2 / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '16px')
@@ -235,7 +235,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     svg2.append('text')
         .attr('class', 'y-axis-label-right')
         .attr('transform', 'rotate(-90)')
-        .attr('y', width2 + margin2.right - 20)
+        .attr('y', width2 + margin2.right + 0)
         .attr('x', -height2 / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '16px')
@@ -460,11 +460,11 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         stateSelect4.append("option").attr("value", d.state).text(d.state);
     });
 
-    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 600).attr("height", 400);
-    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 600).attr("height", 400);
+    const svgCases4 = d3.select("#scene4 #chart-cases").append("svg").attr("width", 800).attr("height", 400);
+    const svgDeaths4 = d3.select("#scene4 #chart-deaths").append("svg").attr("width", 800).attr("height", 400);
 
     const margin4 = { top: 20, right: 30, bottom: 50, left: 60 };
-    const width4 = 600 - margin4.left - margin4.right;
+    const width4 = 800 - margin4.left - margin4.right;
     const height4 = 400 - margin4.top - margin4.bottom;
 
     const xScale4 = d3.scaleTime().range([0, width4]);
