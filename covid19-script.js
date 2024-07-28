@@ -1,26 +1,27 @@
 let currentScene = 0;
 const scenes = document.querySelectorAll('.scene');
 
+// Function to navigate between scenes
 function navigate(offset) {
-    if (currentScene === scenes.length - 1 && offset > 0) {
-        // Prevent navigation forward from the last scene
-        return;
-    }
-
     scenes[currentScene].style.display = 'none';
     currentScene += offset;
     if (currentScene < 0) currentScene = scenes.length - 1;
     if (currentScene >= scenes.length) currentScene = 0;
     scenes[currentScene].style.display = 'block';
 
-    // Disable the Next button on the last scene
-    document.querySelectorAll('.nav-button').forEach(button => {
-        if (currentScene === scenes.length - 1 && button.innerHTML === 'Next') {
-            button.disabled = true;
-        } else if (button.innerHTML === 'Next') {
-            button.disabled = false;
-        }
-    });
+    // Disable "Next" button on the last scene
+    if (currentScene === scenes.length - 1) {
+        document.querySelector(".nav-button.next").style.display = 'none';
+    } else {
+        document.querySelector(".nav-button.next").style.display = 'inline-block';
+    }
+}
+
+// Function to navigate from the intro page to the first scene
+function navigateToScenes() {
+    scenes[currentScene].style.display = 'none';
+    currentScene = 1; // Start from the first scene after the intro
+    scenes[currentScene].style.display = 'block';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
