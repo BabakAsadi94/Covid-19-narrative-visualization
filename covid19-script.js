@@ -2,11 +2,25 @@ let currentScene = 0;
 const scenes = document.querySelectorAll('.scene');
 
 function navigate(offset) {
+    if (currentScene === scenes.length - 1 && offset > 0) {
+        // Prevent navigation forward from the last scene
+        return;
+    }
+
     scenes[currentScene].style.display = 'none';
     currentScene += offset;
     if (currentScene < 0) currentScene = scenes.length - 1;
     if (currentScene >= scenes.length) currentScene = 0;
     scenes[currentScene].style.display = 'block';
+
+    // Disable the Next button on the last scene
+    document.querySelectorAll('.nav-button').forEach(button => {
+        if (currentScene === scenes.length - 1 && button.innerHTML === 'Next') {
+            button.disabled = true;
+        } else if (button.innerHTML === 'Next') {
+            button.disabled = false;
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
