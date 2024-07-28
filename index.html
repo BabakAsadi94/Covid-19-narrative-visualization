@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Covid Data Visualization</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="covid19-styles.css">
 </head>
 <body>
-    <div id="scene1" class="scene">
-        <!-- Scene 1 Buttons and Visualization -->
+    <div class="scene" id="scene1">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
         <div class="button-group">
             <button id="new-cases-btn" data-type="covid_cases">New Cases</button>
             <button id="cumulative-cases-btn" data-type="cum_covid_cases">Cumulative Cases</button>
@@ -16,9 +19,12 @@
         </div>
         <div id="visualization1"></div>
     </div>
-    
-    <div id="scene2" class="scene">
-        <!-- Scene 2 Buttons and Visualization -->
+
+    <div class="scene" id="scene2">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
         <div class="button-group">
             <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
             <button id="cumulative-deaths-btn" data-type="cum_covid_deaths">Cumulative Deaths</button>
@@ -27,9 +33,12 @@
         </div>
         <div id="visualization2"></div>
     </div>
-    
-    <div id="scene3" class="scene">
-        <!-- Scene 3 Buttons and Visualization -->
+
+    <div class="scene" id="scene3">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
         <div class="button-group">
             <button id="cases-btn" class="cases active" data-type="cases">Cases</button>
             <button id="deaths-btn" class="deaths" data-type="deaths">Deaths</button>
@@ -39,14 +48,19 @@
             <div id="slider-label" class="slider-label">Date: </div>
             <div class="slider-labels"></div>
         </div>
-        <div id="chart"></div>
+        <div class="chart-container">
+            <div id="chart" class="chart"></div>
+        </div>
     </div>
-    
-    <div id="scene4" class="scene">
-        <!-- Scene 4 Selects and Visualization -->
+
+    <div class="scene" id="scene4">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
         <div class="button-group">
-            <button id="cases-btn-scene4" data-type="cases">Cases</button>
-            <button id="deaths-btn-scene4" data-type="deaths">Deaths</button>
+            <button id="cases-btn" data-type="cases">Cases</button>
+            <button id="deaths-btn" data-type="deaths">Deaths</button>
         </div>
         <div class="select-group">
             <select id="region-select">
@@ -57,15 +71,10 @@
                 <!-- State options will be populated dynamically -->
             </select>
         </div>
-        <div id="visualization4"></div>
+        <div id="visualization"></div>
     </div>
-    
-    <div class="nav-buttons">
-        <button class="nav-button" onclick="navigate(-1)">Previous</button>
-        <button class="nav-button" onclick="navigate(1)">Next</button>
-    </div>
-    
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="script.js"></script>
+    <script src="covid19-script.js"></script>
 </body>
 </html>
