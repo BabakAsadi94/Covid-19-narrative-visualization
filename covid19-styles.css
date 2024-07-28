@@ -10,10 +10,6 @@ body {
     padding: 20px;
 }
 
-.scene {
-    display: none;
-}
-
 .button-group {
     margin-bottom: 20px;
     text-align: center;
