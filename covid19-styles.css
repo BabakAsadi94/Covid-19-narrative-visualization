@@ -14,19 +14,31 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white; /* Change all text color to yellow */
+    color: white; /* Default color for text in the intro */
     padding: 0 20px;
 }
 
 .intro h1 {
-    font-size: 48px;
+    font-size: 60px; /* Make the title larger */
     margin-bottom: 20px;
+    font-family: 'Georgia', serif; /* Change the font to a fancier one */
+    text-shadow: 2px 2px 4px #000000; /* Add shadow for a fancier effect */
+    color: yellow; /* Specific color for the title */
 }
 
-.intro p {
+.intro p.intro-text {
+    font-size: 24px; /* Make the introductory text larger */
+    font-family: 'Georgia', serif; /* Change the font to a fancier one */
+    text-shadow: 1px 1px 2px #000000; /* Add shadow for a fancier effect */
+    margin-bottom: 20px;
+    color: yellow; /* Specific color for the introductory text */
+}
+
+.intro p.scene-description {
     font-size: 20px;
     margin-bottom: 10px;
     line-height: 1.6;
+    color: white; /* Specific color for the scene descriptions */
 }
 
 .intro button {
