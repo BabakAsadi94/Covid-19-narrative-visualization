@@ -56,6 +56,14 @@ body {
     background-color: red;
 }
 
+#scene3 .button-group .cases {
+    background-color: blue;
+}
+
+#scene3 .button-group .deaths {
+    background-color: red;
+}
+
 .tooltip {
     position: absolute;
     text-align: center;
