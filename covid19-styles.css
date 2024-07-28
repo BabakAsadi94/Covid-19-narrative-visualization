@@ -23,7 +23,7 @@ body {
     margin-bottom: 20px;
     font-family: 'Georgia', serif; /* Change the font to a fancier one */
     text-shadow: 2px 2px 4px #000000; /* Add shadow for a fancier effect */
-    color: yellow; /* Specific color for the title */
+    color: white; /* Specific color for the title */
 }
 
 .intro p.intro-text {
@@ -31,7 +31,7 @@ body {
     font-family: 'Georgia', serif; /* Change the font to a fancier one */
     text-shadow: 1px 1px 2px #000000; /* Add shadow for a fancier effect */
     margin-bottom: 20px;
-    color: yellow; /* Specific color for the introductory text */
+    color: white; /* Specific color for the introductory text */
 }
 
 .intro p.scene-description {
