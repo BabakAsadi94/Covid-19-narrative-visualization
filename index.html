@@ -1,147 +1,80 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Covid Data Visualization</title>
+    <link rel="stylesheet" href="covid19-styles.css">
+</head>
+<body>
+    <div class="scene" id="scene1">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
+        <div class="button-group">
+            <button id="new-cases-btn" data-type="covid_cases">New Cases</button>
+            <button id="cumulative-cases-btn" data-type="cum_covid_cases">Cumulative Cases</button>
+            <button id="both-btn" data-type="both">Both</button>
+            <button id="switch-y-axis">Switch Y-Axis</button>
+        </div>
+        <div id="visualization1"></div>
+    </div>
 
-.scene {
-    display: none;
-    padding: 20px;
-    text-align: center;
-}
+    <div class="scene" id="scene2">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
+        <div class="button-group">
+            <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
+            <button id="cumulative-deaths-btn" data-type="cum_covid_deaths">Cumulative Deaths</button>
+            <button id="both-deaths-btn" data-type="both">Both</button>
+            <button id="switch-y-axis-deaths">Switch Y-Axis</button>
+        </div>
+        <div id="visualization2"></div>
+    </div>
 
-.nav-buttons {
-    text-align: left;
-    margin-top: 20px;
-}
+    <div class="scene" id="scene3">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
+        <div class="button-group">
+            <button id="cases-btn" class="cases active" data-type="cases">Cases</button>
+            <button id="deaths-btn" class="deaths" data-type="deaths">Deaths</button>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="time-slider" min="0" max="160" step="1">
+            <div id="slider-label" class="slider-label">Date: </div>
+            <div class="slider-labels"></div>
+        </div>
+        <div class="chart-container">
+            <div id="chart" class="chart"></div>
+        </div>
+    </div>
 
-.nav-button {
-    background-color: #007BFF;
-    border: none;
-    color: white;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-}
+    <div class="scene" id="scene4">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="navigate(-1)">Previous</button>
+            <button class="nav-button" onclick="navigate(1)">Next</button>
+        </div>
+        <div class="button-group">
+            <button id="cases-btn" data-type="cases">Cases</button>
+            <button id="deaths-btn" data-type="deaths">Deaths</button>
+        </div>
+        <div class="select-group">
+            <select id="region-select">
+                <option value="nation">Nation</option>
+                <option value="state">State</option>
+            </select>
+            <select id="state-select" style="display:none;">
+                <!-- State options will be populated dynamically -->
+            </select>
+        </div>
+        <div id="visualization"></div>
+    </div>
 
-.nav-button:hover {
-    background-color: #0056b3;
-}
-
-.button-group {
-    margin-bottom: 20px;
-}
-
-.button-group button {
-    padding: 10px 24px;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    border: none;
-    color: white;
-}
-
-#scene1 .button-group button {
-    background-color: blue;
-}
-
-#scene2 .button-group button {
-    background-color: red;
-}
-
-#scene3 .button-group .cases {
-    background-color: blue;
-}
-
-#scene3 .button-group .deaths {
-    background-color: red;
-}
-
-.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 120px;
-    height: auto;
-    padding: 5px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-.chart-container, .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.chart {
-    width: 85%;
-    height: 540px;
-    margin: 20px 0;
-}
-
-.slider-container {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.slider-container input {
-    width: 85%;
-}
-
-.slider-label {
-    margin-top: 5px;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-}
-
-.slider-labels {
-    display: flex;
-    justify-content: space-between;
-    width: 85%;
-    margin: 0 auto;
-}
-
-.slider-labels span {
-    font-size: 12px;
-    color: gray;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.row {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-#chart-cases, #chart-deaths {
-    width: 50%;
-    height: 400px;
-}
-
-.select-group {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.select-group select {
-    font-size: 16px;
-    padding: 8px;
-}
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="covid19-script.js"></script>
+</body>
+</html>
