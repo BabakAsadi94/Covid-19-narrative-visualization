@@ -48,9 +48,19 @@ function initScene1() {
         let yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10);
         const xAxis1 = d3.axisBottom(xScale1);
 
-        svg1.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height1})`).call(xAxis1);
-        svg1.append("g").attr("class", "y-axis y-left").call(yAxisLeft1);
-        svg1.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width1},0)`).call(yAxisRight1);
+        svg1.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${height1})`)
+            .call(xAxis1);
+
+        svg1.append("g")
+            .attr("class", "y-axis y-left")
+            .call(yAxisLeft1);
+
+        svg1.append("g")
+            .attr("class", "y-axis y-right")
+            .attr("transform", `translate(${width1},0)`)
+            .call(yAxisRight1);
 
         svg1.append('text')
             .attr('class', 'y-axis-label-left')
@@ -211,9 +221,19 @@ function initScene2() {
         let yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
         const xAxis2 = d3.axisBottom(xScale2);
 
-        svg2.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height2})`).call(xAxis2);
-        svg2.append("g").attr("class", "y-axis y-left").call(yAxisLeft2);
-        svg2.append("g").attr("class", "y-axis y-right").attr("transform", `translate(${width2},0)`).call(yAxisRight2);
+        svg2.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${height2})`)
+            .call(xAxis2);
+
+        svg2.append("g")
+            .attr("class", "y-axis y-left")
+            .call(yAxisLeft2);
+
+        svg2.append("g")
+            .attr("class", "y-axis y-right")
+            .attr("transform", `translate(${width2},0)`)
+            .call(yAxisRight2);
 
         svg2.append('text')
             .attr('class', 'y-axis-label-left')
@@ -812,6 +832,3 @@ function initScene4() {
         });
     });
 }
-
-
-           
