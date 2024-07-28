@@ -192,7 +192,6 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         updateHover1();
     }
 
-    updateVisualization1('both');
     d3.selectAll('#scene1 .button-group button[data-type]').on('click', function () {
         const dataType = d3.select(this).attr('data-type');
         d3.selectAll('#scene1 .button-group button[data-type]').classed('active', false);
@@ -343,7 +342,6 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         updateHover2();
     }
 
-    updateVisualization2('both');
     d3.selectAll('#scene2 .button-group button[data-type]').on('click', function () {
         const dataType = d3.select(this).attr('data-type');
         d3.selectAll('#scene2 .button-group button[data-type]').classed('active', false);
@@ -353,6 +351,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
 
     // Scene 3: State-wise Cases and Deaths
     const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1200).attr("height", 450);
+    
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
     const width3 = 1200 - margin3.left - margin3.right;
     const height3 = 450 - margin3.top - margin3.bottom;
@@ -409,14 +408,14 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
             .attr("width", x1 - x0).attr("height", 0).attr("fill", "none").attr("stroke", "black").attr("stroke-width", 2)
             .transition().duration(2000).attr("height", rectHeight);
 
-        const annotationText = annotationGroup.append("text").attr("x", x1 + 10).attr("y", yScale3(d3.max(top5, d => d.value)) - 20 + 20)
+        const annotationText = annotationGroup.append("text").attr("x", x1 + 10).attr("y", yScale3(d3.max(top5, d => d.value)) - 20)
             .attr("text-anchor", "start").attr("font-size", "14px").attr("font-weight", "bold").attr("opacity", 0)
             .transition().duration(2000).attr("opacity", 1).text(`Top 5 States in ${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`);
 
         annotationGroup.selectAll(".detail-text").remove();
         top5.forEach((d, i) => {
             annotationGroup.append("text").attr("class", "detail-text")
-                .attr("x", x1 + 10).attr("y", yScale3(d3.max(top5, d => d.value)) - 20 + 20 + (i + 1) * 20)
+                .attr("x", x1 + 10).attr("y", yScale3(d3.max(top5, d => d.value)) - 20 + (i + 1) * 20)
                 .attr("text-anchor", "start").attr("font-size", "12px").attr("opacity", 0)
                 .transition().duration(2000).attr("opacity", 1).text(`${d.state}: ${d.value.toLocaleString()}`);
         });
