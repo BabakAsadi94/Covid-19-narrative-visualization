@@ -580,14 +580,16 @@ function initScene4() {
                 .attr("class", "line left-line")
                 .attr("fill", "none")
                 .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
-                .attr("stroke-width", 2);
+                .attr("stroke-width", 2)
+                .attr("d", lineLeft);
 
             const rightPath = svg.append("path")
                 .datum(plotData)
                 .attr("class", "line right-line")
                 .attr("fill", "none")
                 .attr("stroke", "green")
-                .attr("stroke-width", 2);
+                .attr("stroke-width", 2)
+                .attr("d", lineRight);
 
             const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
 
@@ -618,14 +620,16 @@ function initScene4() {
                             .attr("class", "line left-remaining-line")
                             .attr("fill", "none")
                             .attr("stroke", currentDataType === 'cases' ? "blue" : "red")
-                            .attr("stroke-width", 2);
+                            .attr("stroke-width", 2)
+                            .attr("d", lineLeft);
 
                         const rightRemainingPath = svg.append("path")
                             .datum(remainingData)
                             .attr("class", "line right-remaining-line")
                             .attr("fill", "none")
                             .attr("stroke", "green")
-                            .attr("stroke-width", 2);
+                            .attr("stroke-width", 2)
+                            .attr("d", lineRight);
 
                         leftRemainingPath.transition().duration(8000).attrTween("stroke-dasharray", function () {
                             const length = this.getTotalLength();
