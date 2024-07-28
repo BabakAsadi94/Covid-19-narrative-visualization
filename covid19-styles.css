@@ -14,7 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: black; /* Default color for text in the intro */
+    color: white; /* Default color for text in the intro */
     padding: 0 20px;
 }
 
@@ -38,7 +38,7 @@ body {
     font-size: 20px;
     margin-bottom: 10px;
     line-height: 1.6;
-    color: black; /* Specific color for the scene descriptions */
+    color: black !important; /* Specific color for the scene descriptions */
 }
 
 .intro button {
