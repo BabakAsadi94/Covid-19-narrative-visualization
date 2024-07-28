@@ -6,8 +6,16 @@ body {
 }
 
 .intro, .scene {
-    display: none;
     padding: 20px;
+}
+
+.intro {
+    display: block;
+}
+
+.scene {
+    display: none;
+    text-align: center;
 }
 
 .button-group {
@@ -49,7 +57,7 @@ body {
 }
 
 .nav-buttons {
-    text-align: center;
+    text-align: left;
     margin-top: 20px;
 }
 
