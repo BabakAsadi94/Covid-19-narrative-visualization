@@ -5,14 +5,55 @@ body {
     padding: 0;
 }
 
-.scene {
+.intro, .scene {
     display: none;
     padding: 20px;
+}
+
+.scene {
+    display: none;
+}
+
+.button-group {
+    margin-bottom: 20px;
     text-align: center;
 }
 
+.button-group button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-group button:hover {
+    background-color: #45a049;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 120px;
+    height: auto;
+    padding: 5px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
 .nav-buttons {
-    text-align: left;
+    text-align: center;
     margin-top: 20px;
 }
 
@@ -32,43 +73,6 @@ body {
 
 .nav-button:hover {
     background-color: #0056b3;
-}
-
-.button-group {
-    margin-bottom: 20px;
-}
-
-.button-group button {
-    padding: 10px 24px;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    border: none;
-    color: white;
-}
-
-#scene1 .button-group button {
-    background-color: blue;
-}
-
-#scene2 .button-group button {
-    background-color: red;
-}
-
-.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 120px;
-    height: auto;
-    padding: 5px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s;
 }
 
 .chart-container, .container {
@@ -107,23 +111,43 @@ body {
     margin: 0 auto;
 }
 
-.slider-labels span {
-    font-size: 12px;
-    color: gray;
-}
-
 .header {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.row {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+.select-css {
+    display: block;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #444;
+    line-height: 1.3;
+    padding: .4em 1.4em .3em .8em;
+    width: 50%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+    border-radius: .5em;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="5" viewBox="0 0 4 5"><path fill="%23444" d="M2 0L0 2h4zM2 5L0 3h4z"/></svg>');
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
 }
 
-#chart-cases, #chart-deaths {
-    width: 50%;
-    height: 400px;
+.select-css:hover {
+    border-color: #888;
+}
+
+.select-css:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 3px 1px rgba(0, 123, 255, .25);
+    box-shadow: 0 0 0 1px -moz-mac-focusring;
+    color: #222; 
+    outline: none;
 }
