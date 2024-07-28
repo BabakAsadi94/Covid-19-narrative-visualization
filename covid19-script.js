@@ -352,7 +352,7 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
     });
 
     // Scene 3: State-wise Cases and Deaths
-    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1200).attr("height", 450);
+    const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 2000).attr("height", 450);
     
     const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
     const width3 = 800 - margin3.left - margin3.right;
