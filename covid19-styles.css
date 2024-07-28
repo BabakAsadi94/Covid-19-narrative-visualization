@@ -64,6 +64,14 @@ body {
     background-color: red;
 }
 
+#scene4 .button-group #cases-btn {
+    background-color: blue;
+}
+
+#scene4 .button-group #deaths-btn {
+    background-color: red;
+}
+
 .tooltip {
     position: absolute;
     text-align: center;
@@ -129,11 +137,6 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
-}
-
-#chart-cases, #chart-deaths {
-    width: 50%;
-    height: 400px;
 }
 
 .select-group {
