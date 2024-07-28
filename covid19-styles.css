@@ -130,18 +130,3 @@ body {
     justify-content: center;
     width: 100%;
 }
-
-#chart-cases, #chart-deaths {
-    width: 50%;
-    height: 400px;
-}
-
-.select-group {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.select-group select {
-    font-size: 16px;
-    padding: 8px;
-}
