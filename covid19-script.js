@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initScene4();
 });
 
+const margin = { top: 20, right: 100, bottom: 60, left: 100 };
+const width = 1200 - margin.left - margin.right;
+const height = 600 - margin.top - margin.bottom;
+
 function initScene1() {
     d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
         const countryData = d3.rollups(
@@ -32,17 +36,18 @@ function initScene1() {
             d => d.date
         ).map(([key, value]) => value);
 
-        const svg1 = d3.select("#scene1 #visualization1").append("svg").attr("width", 1200).attr("height", 600);
-        const margin1 = { top: 20, right: 100, bottom: 60, left: 100 };
-        const width1 = 1200 - margin1.left - margin1.right;
-        const height1 = 600 - margin1.top - margin1.bottom;
+        const svg1 = d3.select("#scene1 #visualization1").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
         let isLogScale1 = false;
-        const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width1]);
-        let yScaleLeft1 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_cases)]).range([height1, 0]);
-        let yScaleRight1 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_cases)]).range([height1, 0]);
-        const yScaleLeftLog1 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_cases)]).range([height1, 0]);
-        const yScaleRightLog1 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_cases)]).range([height1, 0]);
+        const xScale1 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width]);
+        let yScaleLeft1 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_cases)]).range([height, 0]);
+        let yScaleRight1 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_cases)]).range([height, 0]);
+        const yScaleLeftLog1 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_cases)]).range([height, 0]);
+        const yScaleRightLog1 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_cases)]).range([height, 0]);
 
         let yAxisLeft1 = d3.axisLeft(yScaleLeft1).ticks(10);
         let yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10);
@@ -50,7 +55,7 @@ function initScene1() {
 
         svg1.append("g")
             .attr("class", "x-axis")
-            .attr("transform", `translate(0,${height1})`)
+            .attr("transform", `translate(0,${height})`)
             .call(xAxis1);
 
         svg1.append("g")
@@ -59,14 +64,14 @@ function initScene1() {
 
         svg1.append("g")
             .attr("class", "y-axis y-right")
-            .attr("transform", `translate(${width1},0)`)
+            .attr("transform", `translate(${width},0)`)
             .call(yAxisRight1);
 
         svg1.append('text')
             .attr('class', 'y-axis-label-left')
             .attr('transform', 'rotate(-90)')
-            .attr('y', -margin1.left + 30)
-            .attr('x', -height1 / 2)
+            .attr('y', -margin.left + 30)
+            .attr('x', -height / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
@@ -76,8 +81,8 @@ function initScene1() {
         svg1.append('text')
             .attr('class', 'y-axis-label-right')
             .attr('transform', 'rotate(-90)')
-            .attr('y', width1 + margin1.right - 20)
-            .attr('x', -height1 / 2)
+            .attr('y', width + margin.right - 20)
+            .attr('x', -height / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
@@ -86,8 +91,8 @@ function initScene1() {
 
         svg1.append('text')
             .attr('class', 'x-axis-label')
-            .attr('x', width1 / 2)
-            .attr('y', height1 + margin1.bottom - 10)
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom - 10)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
@@ -106,8 +111,8 @@ function initScene1() {
 
         function toggleScale1() {
             isLogScale1 = !isLogScale1;
-            yScaleLeft1 = isLogScale1 ? yScaleLeftLog1 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_cases)]).range([height1, 0]);
-            yScaleRight1 = isLogScale1 ? yScaleRightLog1 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_cases)]).range([height1, 0]);
+            yScaleLeft1 = isLogScale1 ? yScaleLeftLog1 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_cases)]).range([height, 0]);
+            yScaleRight1 = isLogScale1 ? yScaleRightLog1 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_cases)]).range([height, 0]);
 
             yAxisLeft1 = d3.axisLeft(yScaleLeft1).ticks(10, isLogScale1 ? ".1s" : "");
             yAxisRight1 = d3.axisRight(yScaleRight1).ticks(10, isLogScale1 ? ".1s" : "");
@@ -205,17 +210,18 @@ function initScene2() {
             d => d.date
         ).map(([key, value]) => value);
 
-        const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 600);
-        const margin2 = { top: 20, right: 100, bottom: 60, left: 100 };
-        const width2 = 1200 - margin2.left - margin2.right;
-        const height2 = 600 - margin2.top - margin2.bottom;
+        const svg2 = d3.select("#scene2 #visualization2").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
         let isLogScale2 = false;
-        const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width2]);
-        let yScaleLeft2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height2, 0]);
-        let yScaleRight2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height2, 0]);
-        const yScaleLeftLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_deaths)]).range([height2, 0]);
-        const yScaleRightLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_deaths)]).range([height2, 0]);
+        const xScale2 = d3.scaleTime().domain(d3.extent(countryData, d => d.date)).range([0, width]);
+        let yScaleLeft2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
+        let yScaleRight2 = d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
+        const yScaleLeftLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
+        const yScaleRightLog2 = d3.scaleLog().domain([1, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
 
         let yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10);
         let yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10);
@@ -223,7 +229,7 @@ function initScene2() {
 
         svg2.append("g")
             .attr("class", "x-axis")
-            .attr("transform", `translate(0,${height2})`)
+            .attr("transform", `translate(0,${height})`)
             .call(xAxis2);
 
         svg2.append("g")
@@ -232,14 +238,14 @@ function initScene2() {
 
         svg2.append("g")
             .attr("class", "y-axis y-right")
-            .attr("transform", `translate(${width2},0)`)
+            .attr("transform", `translate(${width},0)`)
             .call(yAxisRight2);
 
         svg2.append('text')
             .attr('class', 'y-axis-label-left')
             .attr('transform', 'rotate(-90)')
-            .attr('y', -margin2.left + 30)
-            .attr('x', -height2 / 2)
+            .attr('y', -margin.left + 30)
+            .attr('x', -height / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
@@ -249,8 +255,8 @@ function initScene2() {
         svg2.append('text')
             .attr('class', 'y-axis-label-right')
             .attr('transform', 'rotate(-90)')
-            .attr('y', width2 + margin2.right - 20)
-            .attr('x', -height2 / 2)
+            .attr('y', width + margin.right - 20)
+            .attr('x', -height / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
@@ -259,8 +265,8 @@ function initScene2() {
 
         svg2.append('text')
             .attr('class', 'x-axis-label')
-            .attr('x', width2 / 2)
-            .attr('y', height2 + margin2.bottom - 10)
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom - 10)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
@@ -279,8 +285,8 @@ function initScene2() {
 
         function toggleScale2() {
             isLogScale2 = !isLogScale2;
-            yScaleLeft2 = isLogScale2 ? yScaleLeftLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height2, 0]);
-            yScaleRight2 = isLogScale2 ? yScaleRightLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height2, 0]);
+            yScaleLeft2 = isLogScale2 ? yScaleLeftLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
+            yScaleRight2 = isLogScale2 ? yScaleRightLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
 
             yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10, isLogScale2 ? ".1s" : "");
             yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10, isLogScale2 ? ".1s" : "");
@@ -389,14 +395,16 @@ function initScene3() {
             }))
         }));
 
-        const svg3 = d3.select("#scene3 #chart").append("svg").attr("width", 1200).attr("height", 600);
-        const margin3 = { top: 20, right: 200, bottom: 100, left: 60 };
-        const width3 = 1200 - margin3.left - margin3.right;
-        const height3 = 600 - margin3.top - margin3.bottom;
-        const xScale3 = d3.scaleBand().range([0, width3]).padding(0.1);
-        const yScale3 = d3.scaleLinear().range([height3, 0]);
+        const svg3 = d3.select("#scene3 #chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const xAxis3 = svg3.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height3})`);
+        const xScale3 = d3.scaleBand().range([0, width]).padding(0.1);
+        const yScale3 = d3.scaleLinear().range([height, 0]);
+
+        const xAxis3 = svg3.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height})`);
         const yAxis3 = svg3.append("g").attr("class", "y-axis");
         const tooltip3 = d3.select("body").append("div").attr("class", "tooltip");
 
@@ -420,12 +428,12 @@ function initScene3() {
             bars.exit().remove();
             bars.transition().duration(1000)
                 .attr("x", d => xScale3(d.state)).attr("y", d => yScale3(d.value))
-                .attr("width", xScale3.bandwidth()).attr("height", d => height3 - yScale3(d.value))
+                .attr("width", xScale3.bandwidth()).attr("height", d => height - yScale3(d.value))
                 .attr("fill", color);
 
             bars.enter().append("rect").attr("class", "bar")
                 .attr("x", d => xScale3(d.state)).attr("y", d => yScale3(d.value))
-                .attr("width", xScale3.bandwidth()).attr("height", d => height3 - yScale3(d.value))
+                .attr("width", xScale3.bandwidth()).attr("height", d => height - yScale3(d.value))
                 .attr("fill", color).attr("opacity", 0).transition().duration(1000).attr("opacity", 1);
 
             bars.on("mouseover", function (event, d) {
@@ -440,7 +448,7 @@ function initScene3() {
             const annotationGroup = svg3.append("g").attr("class", "annotation-group");
             const x0 = xScale3(top5[0].state) - xScale3.bandwidth() / 2;
             const x1 = xScale3(top5[top5.length - 1].state) + xScale3.bandwidth() * 1.5;
-            const rectHeight = height3 - yScale3(d3.max(top5, d => d.value)) + 20;
+            const rectHeight = height - yScale3(d3.max(top5, d => d.value)) + 20;
 
             annotationGroup.append("rect").attr("x", x0).attr("y", yScale3(d3.max(top5, d => d.value)) - 20)
                 .attr("width", x1 - x0).attr("height", 0).attr("fill", "none").attr("stroke", "black").attr("stroke-width", 2)
@@ -507,10 +515,6 @@ function initScene4() {
         });
 
         // Set up SVG and dimensions
-        const margin = { top: 20, right: 100, bottom: 60, left: 100 };
-        const width = 1200 - margin.left - margin.right;
-        const height = 600 - margin.top - margin.bottom;
-
         const svg = d3.select("#scene4 #visualization")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
