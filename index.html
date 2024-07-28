@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Scene 1: New and Cumulative Cases -->
     <div class="scene" id="scene1">
         <div class="nav-buttons">
             <button class="nav-button" onclick="navigate(-1)">Previous</button>
@@ -15,11 +16,12 @@
             <button id="new-cases-btn" data-type="covid_cases">New Cases</button>
             <button id="cumulative-cases-btn" data-type="cum_covid_cases">Cumulative Cases</button>
             <button id="both-btn" data-type="both">Both</button>
-            <button id="switch-y-axis">Switch Y-Axis</button>
+            <button id="switch-y-axis1">Switch Y-Axis</button>
         </div>
         <div id="visualization1"></div>
     </div>
 
+    <!-- Scene 2: New and Cumulative Deaths -->
     <div class="scene" id="scene2">
         <div class="nav-buttons">
             <button class="nav-button" onclick="navigate(-1)">Previous</button>
@@ -29,11 +31,12 @@
             <button id="new-deaths-btn" data-type="covid_deaths">New Deaths</button>
             <button id="cumulative-deaths-btn" data-type="cum_covid_deaths">Cumulative Deaths</button>
             <button id="both-btn" data-type="both">Both</button>
-            <button id="switch-y-axis">Switch Y-Axis</button>
+            <button id="switch-y-axis2">Switch Y-Axis</button>
         </div>
         <div id="visualization2"></div>
     </div>
 
+    <!-- Scene 3: State-wise Cases and Deaths -->
     <div class="scene" id="scene3">
         <div class="nav-buttons">
             <button class="nav-button" onclick="navigate(-1)">Previous</button>
@@ -48,19 +51,18 @@
             <div id="slider-label" class="slider-label">Date: </div>
             <div class="slider-labels"></div>
         </div>
-        <div class="chart-container">
-            <div id="chart" class="chart"></div>
-        </div>
+        <div id="chart" class="chart"></div>
     </div>
 
+    <!-- Scene 4: New Visualization -->
     <div class="scene" id="scene4">
         <div class="nav-buttons">
             <button class="nav-button" onclick="navigate(-1)">Previous</button>
             <button class="nav-button" onclick="navigate(1)">Next</button>
         </div>
         <div class="button-group">
-            <button id="cases-btn" data-type="cases">Cases</button>
-            <button id="deaths-btn" data-type="deaths">Deaths</button>
+            <button id="cases-btn4" data-type="cases">Cases</button>
+            <button id="deaths-btn4" data-type="deaths">Deaths</button>
         </div>
         <div class="select-group">
             <select id="region-select">
