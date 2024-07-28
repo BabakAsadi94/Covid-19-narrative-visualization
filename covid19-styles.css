@@ -14,14 +14,13 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white;
+    color: yellow; /* Change all text color to yellow */
     padding: 0 20px;
 }
 
 .intro h1 {
     font-size: 48px;
     margin-bottom: 20px;
-    color: yellow; /* Change title color to yellow */
 }
 
 .intro p {
