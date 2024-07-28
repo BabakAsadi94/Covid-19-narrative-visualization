@@ -3,7 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Covid Data Visualization</title>
-    <link rel="stylesheet" href="covid19-styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .button-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .button-group button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .button-group button:hover {
+            background-color: #45a049;
+        }
+
+        .button-group #cases-btn {
+            background-color: blue;
+        }
+
+        .button-group #deaths-btn {
+            background-color: red;
+        }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 120px;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .select-group {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .select-group select {
+            font-size: 16px;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
     <div class="scene" id="scene1">
@@ -54,21 +114,20 @@
     </div>
 
     <div class="scene" id="scene4">
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="navigate(-1)">Previous</button>
-            <button class="nav-button" onclick="navigate(1)">Next</button>
+        <div class="button-group">
+            <button id="cases-btn" data-type="cases">Cases</button>
+            <button id="deaths-btn" data-type="deaths">Deaths</button>
         </div>
-        <div class="container">
-            <div class="header">
-                <h1>Covid Data Visualization by State</h1>
-                <label for="state-select">Select a State:</label>
-                <select id="state-select"></select>
-            </div>
-            <div class="row">
-                <div id="chart-cases" class="chart"></div>
-                <div id="chart-deaths" class="chart"></div>
-            </div>
+        <div class="select-group">
+            <select id="region-select">
+                <option value="nation">Nation</option>
+                <option value="state">State</option>
+            </select>
+            <select id="state-select" style="display:none;">
+                <!-- State options will be populated dynamically -->
+            </select>
         </div>
+        <div id="visualization"></div>
     </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
