@@ -1,6 +1,5 @@
 let currentScene = 0;
 const scenes = document.querySelectorAll('.scene');
-const intro = document.getElementById('intro');
 
 function navigate(offset) {
     scenes[currentScene].style.display = 'none';
@@ -11,14 +10,12 @@ function navigate(offset) {
 }
 
 function navigateTo(sceneIndex) {
-    intro.style.display = 'none';
     scenes[currentScene].style.display = 'none';
     currentScene = sceneIndex;
     scenes[currentScene].style.display = 'block';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    intro.style.display = 'block';
     scenes.forEach(scene => scene.style.display = 'none');
     scenes[currentScene].style.display = 'block';
 });
@@ -201,6 +198,13 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         updateHover1();
     }
 
+    d3.selectAll('#scene1 .button-group button[data-type]').on('click', function () {
+        const dataType = d3.select(this).attr('data-type');
+        d3.selectAll('#scene1 .button-group button[data-type]').classed('active', false);
+        d3.select(this).classed('active', true);
+        updateVisualization1(dataType);
+    });
+
     // Scene 2: New Deaths and Cumulative Deaths Visualization
     const svg2 = d3.select("#scene2 #visualization2").append("svg").attr("width", 1200).attr("height", 600);
     const margin2 = { top: 20, right: 60, bottom: 60, left: 100 };
@@ -344,7 +348,6 @@ d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/mai
         updateHover2();
     }
 
-    updateVisualization2('both');
     d3.selectAll('#scene2 .button-group button[data-type]').on('click', function () {
         const dataType = d3.select(this).attr('data-type');
         d3.selectAll('#scene2 .button-group button[data-type]').classed('active', false);
