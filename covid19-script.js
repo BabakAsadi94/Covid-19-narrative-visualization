@@ -15,12 +15,12 @@ function navigateTo(sceneIndex) {
     scenes[currentScene].style.display = 'none';
     currentScene = sceneIndex;
     scenes[currentScene].style.display = 'block';
+    document.querySelector('.nav-buttons').style.display = 'block';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     intro.style.display = 'block';
     scenes.forEach(scene => scene.style.display = 'none');
-    scenes[currentScene].style.display = 'block';
 });
 
 d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
