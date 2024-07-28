@@ -1,5 +1,8 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
 .scene {
@@ -8,30 +11,8 @@ body {
     text-align: center;
 }
 
-.button-group {
-    margin-bottom: 20px;
-}
-
-.button-group button {
-    padding: 10px 24px;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    border: none;
-    color: white;
-}
-
-.button-group #cases-btn {
-    background-color: blue;
-}
-
-.button-group #deaths-btn {
-    background-color: red;
-}
-
 .nav-buttons {
-    text-align: center;
+    text-align: left;
     margin-top: 20px;
 }
 
@@ -51,6 +32,36 @@ body {
 
 .nav-button:hover {
     background-color: #0056b3;
+}
+
+.button-group {
+    margin-bottom: 20px;
+}
+
+.button-group button {
+    padding: 10px 24px;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    color: white;
+}
+
+#scene1 .button-group button {
+    background-color: blue;
+}
+
+#scene2 .button-group button {
+    background-color: red;
+}
+
+#scene3 .button-group .cases {
+    background-color: blue;
+}
+
+#scene3 .button-group .deaths {
+    background-color: red;
 }
 
 .tooltip {
@@ -123,4 +134,14 @@ body {
 #chart-cases, #chart-deaths {
     width: 50%;
     height: 400px;
+}
+
+.select-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.select-group select {
+    font-size: 16px;
+    padding: 8px;
 }
