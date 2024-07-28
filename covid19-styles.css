@@ -1,61 +1,8 @@
 body {
     font-family: Arial, sans-serif;
-}
-
-.button-group {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.button-group button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-}
-
-.button-group button:hover {
-    background-color: #45a049;
-}
-
-#scene3 .button-group .cases {
-    background-color: blue;
-}
-
-#scene3 .button-group .deaths {
-    background-color: red;
-}
-
-.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 120px;
-    height: auto;
-    padding: 5px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-.select-group {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.select-group select {
-    font-size: 16px;
-    padding: 8px;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
 .scene {
@@ -85,6 +32,51 @@ body {
 
 .nav-button:hover {
     background-color: #0056b3;
+}
+
+.button-group {
+    margin-bottom: 20px;
+}
+
+.button-group button {
+    padding: 10px 24px;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    color: white;
+}
+
+#scene1 .button-group button {
+    background-color: blue;
+}
+
+#scene2 .button-group button {
+    background-color: red;
+}
+
+#scene3 .button-group .cases {
+    background-color: blue;
+}
+
+#scene3 .button-group .deaths {
+    background-color: red;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 120px;
+    height: auto;
+    padding: 5px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
 }
 
 .chart-container, .container {
@@ -137,4 +129,19 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+#chart-cases, #chart-deaths {
+    width: 50%;
+    height: 400px;
+}
+
+.select-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.select-group select {
+    font-size: 16px;
+    padding: 8px;
 }
