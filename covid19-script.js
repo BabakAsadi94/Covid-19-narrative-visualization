@@ -176,9 +176,11 @@ function initScene1() {
         }
 
         function addAnnotations1() {
+            svg1.selectAll('.annotation').remove(); // Remove existing annotations
+
             const annotations = [
                 { date: new Date('2020-04-04'), label: 'The initial peak' },
-                { date: new Date('2021-01-09'), label: 'A significant surge in cases due to holiday gatherings and colder weather driving people indoors' },
+                { date: new Date('2021-01-09'), label: 'Significant surge in cases due to holiday gatherings and colder weather driving people indoors' },
                 { date: new Date('2021-09-04'), label: 'Peak of Delta variant' },
                 { date: new Date('2022-01-15'), label: 'Omicron variant resulted in record numbers of daily cases, though it generally caused less severe disease' }
             ];
@@ -187,21 +189,33 @@ function initScene1() {
                 const x = xScale1(annotation.date);
                 const y = yScaleRight1(d3.max(countryData, d => d.cum_covid_cases));
 
+                svg1.append('line')
+                    .attr('class', 'annotation')
+                    .attr('x1', x)
+                    .attr('y1', yScaleLeft1(d3.max(countryData, d => d.covid_cases)))
+                    .attr('x2', x)
+                    .attr('y2', y - 40)
+                    .attr('stroke', 'black')
+                    .attr('stroke-width', 1)
+                    .attr('marker-end', 'url(#arrow)');
+
                 svg1.append('rect')
+                    .attr('class', 'annotation')
                     .attr('x', x - 75)
-                    .attr('y', y - 30)
+                    .attr('y', y - 60)
                     .attr('width', 150)
-                    .attr('height', 60)
+                    .attr('height', 50)
                     .attr('rx', 4)
                     .attr('ry', 4)
                     .attr('fill', 'white')
                     .attr('stroke', 'black');
 
                 svg1.append('text')
+                    .attr('class', 'annotation')
                     .attr('x', x)
-                    .attr('y', y - 10)
+                    .attr('y', y - 40)
                     .attr('text-anchor', 'middle')
-                    .style('font-size', '12px')
+                    .style('font-size', '10px')
                     .style('font-weight', 'bold')
                     .text(annotation.label);
             });
@@ -246,6 +260,7 @@ function initScene1() {
         }
 
         d3.selectAll('#scene1 .button-group button[data-type]').on('click', function () {
+            svg1.selectAll('.annotation').remove(); // Remove annotations when switching data types
             const dataType = d3.select(this).attr('data-type');
             d3.selectAll('#scene1 .button-group button[data-type]').classed('active', false);
             d3.select(this).classed('active', true);
@@ -391,6 +406,8 @@ function initScene2() {
         }
 
         function addAnnotations2() {
+            svg2.selectAll('.annotation').remove(); // Remove existing annotations
+
             const annotations = [
                 { date: new Date('2020-04-18'), label: 'The initial peak' },
                 { date: new Date('2021-01-16'), label: 'The highest deaths record due to holiday gatherings and colder weather driving people indoors' },
@@ -402,21 +419,33 @@ function initScene2() {
                 const x = xScale2(annotation.date);
                 const y = yScaleRight2(d3.max(countryData, d => d.cum_covid_deaths));
 
+                svg2.append('line')
+                    .attr('class', 'annotation')
+                    .attr('x1', x)
+                    .attr('y1', yScaleLeft2(d3.max(countryData, d => d.covid_deaths)))
+                    .attr('x2', x)
+                    .attr('y2', y - 40)
+                    .attr('stroke', 'black')
+                    .attr('stroke-width', 1)
+                    .attr('marker-end', 'url(#arrow)');
+
                 svg2.append('rect')
+                    .attr('class', 'annotation')
                     .attr('x', x - 75)
-                    .attr('y', y - 30)
+                    .attr('y', y - 60)
                     .attr('width', 150)
-                    .attr('height', 60)
+                    .attr('height', 50)
                     .attr('rx', 4)
                     .attr('ry', 4)
                     .attr('fill', 'white')
                     .attr('stroke', 'black');
 
                 svg2.append('text')
+                    .attr('class', 'annotation')
                     .attr('x', x)
-                    .attr('y', y - 10)
+                    .attr('y', y - 40)
                     .attr('text-anchor', 'middle')
-                    .style('font-size', '12px')
+                    .style('font-size', '10px')
                     .style('font-weight', 'bold')
                     .text(annotation.label);
             });
@@ -461,6 +490,7 @@ function initScene2() {
         }
 
         d3.selectAll('#scene2 .button-group button[data-type]').on('click', function () {
+            svg2.selectAll('.annotation').remove(); // Remove annotations when switching data types
             const dataType = d3.select(this).attr('data-type');
             d3.selectAll('#scene2 .button-group button[data-type]').classed('active', false);
             d3.select(this).classed('active', true);
