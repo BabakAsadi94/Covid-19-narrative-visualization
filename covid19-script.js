@@ -425,7 +425,7 @@ function initScene2() {
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
                 .attr('width', 400)
-                .attr('height', annotations.length * 20*1.3 + 30)
+                .attr('height', annotations.length * 20 * 1.3 + 30)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -443,11 +443,12 @@ function initScene2() {
                 .attr('x', -margin.left + 20)
                 .attr('dy', '1.6em')
                 .text(d => d);
-             annotationGroup.append('a')
+
+            annotationGroup.append('a')
                 .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
                 .append('text')
                 .attr('x', -margin.left + 100)
-                .attr('y', annotations.length * 20 *1.3+ 35)
+                .attr('y', annotations.length * 20 * 1.3 + 35)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
                 .style('fill', 'blue')
@@ -505,6 +506,7 @@ function initScene2() {
         updateVisualization2('covid_deaths'); // or 'cum_covid_deaths' as needed
     });
 }
+
 
 function initScene3() {
     d3.csv('https://raw.githubusercontent.com/BabakAsadi94/Covid-19-narrative-visualization/main/covid_weekly_data.csv').then(data => {
