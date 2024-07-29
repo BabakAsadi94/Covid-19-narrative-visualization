@@ -182,7 +182,7 @@ function initScene1() {
                 { date: '2020-04-04', label: 'The initial peak' },
                 { date: '2021-01-09', label: 'Significant surge in cases' },
                 { date: '2021-09-04', label: 'Peak of Delta variant' },
-                { date: '2022-01-15', label: '"Omicron has caused record daily cases' }
+                { date: '2022-01-15', label: 'Omicron has caused record daily cases' }
             ];
 
             const annotationGroup = svg1.append('g').attr('class', 'annotation');
@@ -215,7 +215,7 @@ function initScene1() {
                 .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
                 .append('text')
                 .attr('x', -margin.left + 80)
-                .attr('y', annotations.length * 20 *1.3+ 50)
+                .attr('y', annotations.length * 20 *1.3+ 80)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
                 .style('fill', 'blue')
