@@ -187,13 +187,13 @@ function initScene1() {
 
             const annotationGroup = svg1.append('g').attr('class', 'annotation');
 
-            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n')+ "\nFurther info: ";
+            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n');
 
             annotationGroup.append('rect')
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
-                .attr('width', 400)
-                .attr('height', annotations.length * 20*1.45 + 40)
+                .attr('width', 390)
+                .attr('height', annotations.length * 20*1.45 + 20)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -211,18 +211,6 @@ function initScene1() {
                 .attr('x', -margin.left + 20)
                 .attr('dy', '1.6em')
                 .text(d => d);
-
-             annotationGroup.append('a')
-                .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
-                .append('text')
-                .attr('x', -margin.left + 20)
-                .attr('y', annotations.length * 20 * 1.3 + 50)
-                .attr('text-anchor', 'start')
-                .style('font-size', '14px')
-                .style('font-weight', 'bold')
-                .style('fill', 'blue')
-                .text('here')
-                .style('text-decoration', 'underline');
         }
 
         function updateVisualization1(dataType) {
@@ -421,13 +409,13 @@ function initScene2() {
 
             const annotationGroup = svg2.append('g').attr('class', 'annotation');
 
-            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n')++ "\nFurther info: ";
+            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n');
 
             annotationGroup.append('rect')
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
-                .attr('width', 400)
-                .attr('height', annotations.length * 20*1.45 + 30)
+                .attr('width', 390)
+                .attr('height', annotations.length * 20*1.25 + 20)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -445,18 +433,6 @@ function initScene2() {
                 .attr('x', -margin.left + 20)
                 .attr('dy', '1.6em')
                 .text(d => d);
-
-             annotationGroup.append('a')
-                .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
-                .append('text')
-                .attr('x', -margin.left + 20)
-                .attr('y', annotations.length * 20 * 1.3 + 50)
-                .attr('text-anchor', 'start')
-                .style('font-size', '14px')
-                .style('font-weight', 'bold')
-                .style('fill', 'blue')
-                .text('here')
-                .style('text-decoration', 'underline');
         }
 
         function updateVisualization2(dataType) {
