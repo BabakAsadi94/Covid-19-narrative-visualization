@@ -40,7 +40,7 @@ const width = 1200 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
 function initScene1() {
-    d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
+    d3.csv('https://raw.githubusercontent.com/BabakAsadi94/Covid-19-narrative-visualization/main/covid_weekly_data.csv').then(data => {
         const countryData = d3.rollups(
             data,
             v => ({
@@ -272,7 +272,7 @@ function initScene1() {
 }
 
 function initScene2() {
-    d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
+    d3.csv('https://raw.githubusercontent.com/BabakAsadi94/Covid-19-narrative-visualization/main/covid_weekly_data.csv').then(data => {
         const countryData = d3.rollups(
             data,
             v => ({
@@ -506,7 +506,7 @@ function initScene2() {
 
 
 function initScene3() {
-    d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
+    d3.csv('https://raw.githubusercontent.com/BabakAsadi94/Covid-19-narrative-visualization/main/covid_weekly_data.csv').then(data => {
         const stateDataByDate = d3.rollups(
             data,
             v => ({
@@ -635,7 +635,7 @@ function initScene3() {
 }
 
 function initScene4() {
-    d3.csv('https://raw.githubusercontent.com/CharlieTruong/cs-416-narrative-viz/main/data/covid_weekly_data.csv').then(data => {
+    d3.csv('https://raw.githubusercontent.com/BabakAsadi94/Covid-19-narrative-visualization/main/covid_weekly_data.csv').then(data => {
         // Get unique states
         const states = Array.from(new Set(data.map(d => d.state))).sort();
         
