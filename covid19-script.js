@@ -175,30 +175,71 @@ function initScene1() {
             addHover1(pathCumCases1, yScaleRight1, 'cum_covid_cases', 'steelblue');
         }
 
+        function addAnnotations1() {
+            const annotations = [
+                { date: new Date('2020-04-04'), label: 'The initial peak' },
+                { date: new Date('2021-01-09'), label: 'A significant surge in cases due to holiday gatherings and colder weather driving people indoors' },
+                { date: new Date('2021-09-04'), label: 'Peak of Delta variant' },
+                { date: new Date('2022-01-15'), label: 'Omicron variant resulted in record numbers of daily cases, though it generally caused less severe disease' }
+            ];
+
+            annotations.forEach(annotation => {
+                const x = xScale1(annotation.date);
+                const y = yScaleRight1(d3.max(countryData, d => d.cum_covid_cases));
+
+                svg1.append('rect')
+                    .attr('x', x - 75)
+                    .attr('y', y - 30)
+                    .attr('width', 150)
+                    .attr('height', 60)
+                    .attr('rx', 4)
+                    .attr('ry', 4)
+                    .attr('fill', 'white')
+                    .attr('stroke', 'black');
+
+                svg1.append('text')
+                    .attr('x', x)
+                    .attr('y', y - 10)
+                    .attr('text-anchor', 'middle')
+                    .style('font-size', '12px')
+                    .style('font-weight', 'bold')
+                    .text(annotation.label);
+            });
+        }
+
         function updateVisualization1(dataType) {
             d3.selectAll('#scene1 .button-group button').attr('disabled', true);
             pathNewCases1.attr("opacity", 0);
             pathCumCases1.attr("opacity", 0);
 
             if (dataType === 'covid_cases') {
-                pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
-                }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
+                }).on('end', () => {
+                    d3.selectAll('#scene1 .button-group button').attr('disabled', null);
+                    addAnnotations1();
+                });
             } else if (dataType === 'cum_covid_cases') {
-                pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
-                }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
+                }).on('end', () => {
+                    d3.selectAll('#scene1 .button-group button').attr('disabled', null);
+                    addAnnotations1();
+                });
             } else {
-                pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathNewCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
                 });
-                pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathCumCases1.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
-                }).on('end', () => d3.selectAll('#scene1 .button-group button').attr('disabled', null));
+                }).on('end', () => {
+                    d3.selectAll('#scene1 .button-group button').attr('disabled', null);
+                    addAnnotations1();
+                });
             }
 
             updateHover1();
@@ -349,30 +390,71 @@ function initScene2() {
             addHover2(pathCumDeaths2, yScaleRight2, 'cum_covid_deaths', 'darkred');
         }
 
+        function addAnnotations2() {
+            const annotations = [
+                { date: new Date('2020-04-18'), label: 'The initial peak' },
+                { date: new Date('2021-01-16'), label: 'The highest deaths record due to holiday gatherings and colder weather driving people indoors' },
+                { date: new Date('2021-09-25'), label: 'Peak of Delta variant' },
+                { date: new Date('2022-01-15'), label: 'Omicron variant' }
+            ];
+
+            annotations.forEach(annotation => {
+                const x = xScale2(annotation.date);
+                const y = yScaleRight2(d3.max(countryData, d => d.cum_covid_deaths));
+
+                svg2.append('rect')
+                    .attr('x', x - 75)
+                    .attr('y', y - 30)
+                    .attr('width', 150)
+                    .attr('height', 60)
+                    .attr('rx', 4)
+                    .attr('ry', 4)
+                    .attr('fill', 'white')
+                    .attr('stroke', 'black');
+
+                svg2.append('text')
+                    .attr('x', x)
+                    .attr('y', y - 10)
+                    .attr('text-anchor', 'middle')
+                    .style('font-size', '12px')
+                    .style('font-weight', 'bold')
+                    .text(annotation.label);
+            });
+        }
+
         function updateVisualization2(dataType) {
             d3.selectAll('#scene2 .button-group button').attr('disabled', true);
             pathNewDeaths2.attr("opacity", 0);
             pathCumDeaths2.attr("opacity", 0);
 
             if (dataType === 'covid_deaths') {
-                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
-                }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
+                }).on('end', () => {
+                    d3.selectAll('#scene2 .button-group button').attr('disabled', null);
+                    addAnnotations2();
+                });
             } else if (dataType === 'cum_covid_deaths') {
-                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
-                }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
+                }).on('end', () => {
+                    d3.selectAll('#scene2 .button-group button').attr('disabled', null);
+                    addAnnotations2();
+                });
             } else {
-                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathNewDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
                 });
-                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function() {
+                pathCumDeaths2.transition().duration(5000).attr("opacity", 1).attrTween("stroke-dasharray", function () {
                     const length = this.getTotalLength();
                     return d3.interpolateString("0," + length, length + "," + length);
-                }).on('end', () => d3.selectAll('#scene2 .button-group button').attr('disabled', null));
+                }).on('end', () => {
+                    d3.selectAll('#scene2 .button-group button').attr('disabled', null);
+                    addAnnotations2();
+                });
             }
 
             updateHover2();
