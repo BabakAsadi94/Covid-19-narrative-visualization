@@ -187,13 +187,13 @@ function initScene1() {
 
             const annotationGroup = svg1.append('g').attr('class', 'annotation');
 
-            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n');
+            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n') + "\nFurther info ";
 
             annotationGroup.append('rect')
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
-                .attr('width', 390)
-                .attr('height', annotations.length * 20*1.45 + 20)
+                .attr('width', 400)
+                .attr('height', annotations.length * 20*1.3 + 30)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -409,13 +409,13 @@ function initScene2() {
 
             const annotationGroup = svg2.append('g').attr('class', 'annotation');
 
-            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n');
+            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n') + "\nFurther info ";
 
             annotationGroup.append('rect')
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
-                .attr('width', 390)
-                .attr('height', annotations.length * 20*1.25 + 20)
+                .attr('width', 400)
+                .attr('height', annotations.length * 20*1.3 + 30)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
