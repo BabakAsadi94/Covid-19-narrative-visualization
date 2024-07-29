@@ -193,7 +193,7 @@ function initScene1() {
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
                 .attr('width', 390)
-                .attr('height', annotations.length * 20*1.45 + 20)
+                .attr('height', annotations.length * 20*1.45 + 30)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
