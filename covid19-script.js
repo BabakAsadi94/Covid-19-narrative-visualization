@@ -506,7 +506,6 @@ function initScene2() {
     });
 }
 
-
 function initScene3() {
     d3.csv('https://raw.githubusercontent.com/BabakAsadi94/Covid-19-narrative-visualization/main/covid_weekly_data.csv').then(data => {
         const stateDataByDate = d3.rollups(
