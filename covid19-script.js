@@ -180,9 +180,9 @@ function initScene1() {
 
             const annotations = [
                 { date: '2020-04-04', label: 'The initial peak' },
-                { date: '2021-01-09', label: 'Significant surge in cases due to holiday gatherings and colder weather driving people indoors' },
+                { date: '2021-01-09', label: 'Significant surge in cases' },
                 { date: '2021-09-04', label: 'Peak of Delta variant' },
-                { date: '2022-01-15', label: 'Omicron variant resulted in record numbers of daily cases, though it generally caused less severe disease' }
+                { date: '2022-01-15', label: 'Omicron variant (record numbers of daily cases)' }
             ];
 
             const annotationGroup = svg1.append('g').attr('class', 'annotation');
@@ -203,7 +203,7 @@ function initScene1() {
                 .attr('x', -margin.left + 20)
                 .attr('y', 30)
                 .attr('text-anchor', 'start')
-                .style('font-size', '10px')
+                .style('font-size', '14px')
                 .style('font-weight', 'bold')
                 .selectAll('tspan')
                 .data(annotationText.split('\n'))
@@ -402,7 +402,7 @@ function initScene2() {
 
             const annotations = [
                 { date: '2020-04-18', label: 'The initial peak' },
-                { date: '2021-01-16', label: 'The highest deaths record due to holiday gatherings and colder weather driving people indoors' },
+                { date: '2021-01-16', label: 'The highest deaths record' },
                 { date: '2021-09-25', label: 'Peak of Delta variant' },
                 { date: '2022-01-15', label: 'Omicron variant' }
             ];
@@ -425,7 +425,7 @@ function initScene2() {
                 .attr('x', -margin.left + 20)
                 .attr('y', 30)
                 .attr('text-anchor', 'start')
-                .style('font-size', '10px')
+                .style('font-size', '14px')
                 .style('font-weight', 'bold')
                 .selectAll('tspan')
                 .data(annotationText.split('\n'))
