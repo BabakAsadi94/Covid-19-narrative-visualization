@@ -215,7 +215,7 @@ function initScene1() {
                 .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
                 .append('text')
                 .attr('x', -margin.left + 100)
-                .attr('y', annotations.length * 20 *1.3+ 40)
+                .attr('y', annotations.length * 20 *1.3+ 30)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
                 .style('fill', 'blue')
@@ -447,7 +447,7 @@ function initScene2() {
                 .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
                 .append('text')
                 .attr('x', -margin.left + 100)
-                .attr('y', annotations.length * 20 *1.3+ 40)
+                .attr('y', annotations.length * 20 *1.3+ 30)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
                 .style('fill', 'blue')
@@ -767,16 +767,31 @@ function initScene4() {
             }).on("end", function() {
                 const firstVaxDate = countryData.find(d => d.cum_one_vax_dose > 0);
                 if (firstVaxDate) {
-                    svg.append("text")
-                        .attr("class", "annotation")
+                    const annotationGroup = svg.append("g").attr("class", "annotation");
+
+                    const annotationText = "Vaccinations Started";
+
+                    // Add a rectangle for the annotation box
+                    annotationGroup.append('rect')
+                        .attr('x', xScale(firstVaxDate.date) - 60)
+                        .attr('y', yScaleRight(firstVaxDate.cum_one_vax_dose) - 20)
+                        .attr('width', 140)
+                        .attr('height', 30)
+                        .attr('rx', 4)
+                        .attr('ry', 4)
+                        .attr('fill', 'white')
+                        .attr('stroke', 'black');
+
+                    // Add the annotation text inside the rectangle
+                    annotationGroup.append("text")
                         .attr("x", xScale(firstVaxDate.date))
                         .attr("y", yScaleRight(firstVaxDate.cum_one_vax_dose))
-                        .attr("dy", -10)
+                        .attr("dy", -5)
                         .attr("text-anchor", "middle")
                         .style("font-size", "12px")
                         .style("font-weight", "bold")
-                        .style("fill", "green")
-                        .text("Vaccinations Started");
+                        .style("fill", "black")
+                        .text(annotationText);
 
                     setTimeout(() => {
                         const leftRemainingPath = svg.append("path")
