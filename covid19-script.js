@@ -350,11 +350,11 @@ function initScene2() {
 
         const pathNewDeaths2 = svg2.append("path").datum(countryData).attr("class", "line new-deaths")
             .attr("fill", "none").attr("stroke", "red").attr("stroke-dasharray", "5,5")
-            .attr("stroke-width", 2).attr("d", lineNewDeaths2).attr("opacity", 0);
+            .attr("stroke-width", 2).attr("d", lineNewDeaths2).attr("opacity", 1);
 
         const pathCumDeaths2 = svg2.append("path").datum(countryData).attr("class", "line cum-deaths")
             .attr("fill", "none").attr("stroke", "darkred").attr("stroke-width", 2)
-            .attr("d", lineCumDeaths2).attr("opacity", 0);
+            .attr("d", lineCumDeaths2).attr("opacity", 1);
 
         function toggleScale2() {
             isLogScale2 = !isLogScale2;
@@ -506,6 +506,7 @@ function initScene2() {
         updateVisualization2('covid_deaths'); // or 'cum_covid_deaths' as needed
     });
 }
+
 
 
 function initScene3() {
