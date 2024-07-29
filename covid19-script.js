@@ -192,8 +192,8 @@ function initScene1() {
             annotationGroup.append('rect')
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
-                .attr('width', 300)
-                .attr('height', annotations.length * 20 + 20)
+                .attr('width', 390)
+                .attr('height', annotations.length * 20*1.3 + 20)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -209,7 +209,7 @@ function initScene1() {
                 .data(annotationText.split('\n'))
                 .enter().append('tspan')
                 .attr('x', -margin.left + 20)
-                .attr('dy', '1.2em')
+                .attr('dy', '1.6em')
                 .text(d => d);
         }
 
@@ -414,8 +414,8 @@ function initScene2() {
             annotationGroup.append('rect')
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
-                .attr('width', 300)
-                .attr('height', annotations.length * 20 + 20)
+                .attr('width', 390)
+                .attr('height', annotations.length * 20*1.3 + 20)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -431,7 +431,7 @@ function initScene2() {
                 .data(annotationText.split('\n'))
                 .enter().append('tspan')
                 .attr('x', -margin.left + 20)
-                .attr('dy', '1.2em')
+                .attr('dy', '1.6em')
                 .text(d => d);
         }
 
