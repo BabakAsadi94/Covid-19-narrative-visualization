@@ -211,7 +211,18 @@ function initScene1() {
                 .attr('x', -margin.left + 20)
                 .attr('dy', '1.6em')
                 .text(d => d);
-        }
+             annotationGroup.append('a')
+                .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
+                .append('text')
+                .attr('x', -margin.left + 20)
+                .attr('y', annotations.length * 20 + 30)
+                .attr('text-anchor', 'start')
+                .style('font-size', '14px')
+                .style('font-weight', 'bold')
+                .style('fill', 'blue')
+                .text('here')
+                .style('text-decoration', 'underline');
+                }
 
         function updateVisualization1(dataType) {
             d3.selectAll('#scene1 .button-group button').attr('disabled', true);
@@ -433,6 +444,17 @@ function initScene2() {
                 .attr('x', -margin.left + 20)
                 .attr('dy', '1.6em')
                 .text(d => d);
+             annotationGroup.append('a')
+                .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
+                .append('text')
+                .attr('x', -margin.left + 20)
+                .attr('y', annotations.length * 20 + 30)
+                .attr('text-anchor', 'start')
+                .style('font-size', '14px')
+                .style('font-weight', 'bold')
+                .style('fill', 'blue')
+                .text('here')
+                .style('text-decoration', 'underline');
         }
 
         function updateVisualization2(dataType) {
