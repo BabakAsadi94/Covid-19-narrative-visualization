@@ -182,7 +182,7 @@ function initScene1() {
                 { date: '2020-04-04', label: 'The initial peak' },
                 { date: '2021-01-09', label: 'Significant surge in cases' },
                 { date: '2021-09-04', label: 'Peak of Delta variant' },
-                { date: '2022-01-15', label: 'Omicron variant (record numbers of daily cases)' }
+                { date: '2022-01-15', label: '"Omicron has caused record daily cases' }
             ];
 
             const annotationGroup = svg1.append('g').attr('class', 'annotation');
@@ -218,7 +218,6 @@ function initScene1() {
                 .attr('y', annotations.length * 20 + 30)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
-                .style('font-weight', 'bold')
                 .style('fill', 'blue')
                 .text('here')
                 .style('text-decoration', 'underline');
@@ -451,7 +450,6 @@ function initScene2() {
                 .attr('y', annotations.length * 20 + 30)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
-                .style('font-weight', 'bold')
                 .style('fill', 'blue')
                 .text('here')
                 .style('text-decoration', 'underline');
