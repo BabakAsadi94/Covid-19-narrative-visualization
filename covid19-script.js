@@ -358,21 +358,28 @@ function initScene2() {
 
         function toggleScale2() {
             isLogScale2 = !isLogScale2;
+
+            // Update y-scales based on the current scale type (logarithmic or linear)
             yScaleLeft2 = isLogScale2 ? yScaleLeftLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.covid_deaths)]).range([height, 0]);
             yScaleRight2 = isLogScale2 ? yScaleRightLog2 : d3.scaleLinear().domain([0, d3.max(countryData, d => d.cum_covid_deaths)]).range([height, 0]);
 
+            // Update y-axes
             yAxisLeft2 = d3.axisLeft(yScaleLeft2).ticks(10, isLogScale2 ? ".1s" : "");
             yAxisRight2 = d3.axisRight(yScaleRight2).ticks(10, isLogScale2 ? ".1s" : "");
 
+            // Transition the y-axes to the new scales
             svg2.select(".y-left").transition().duration(500).call(yAxisLeft2);
             svg2.select(".y-right").transition().duration(500).call(yAxisRight2);
 
+            // Update the line generators with the new y-scales
             lineNewDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleLeft2(d.covid_deaths)).curve(d3.curveMonotoneX);
             lineCumDeaths2 = d3.line().x(d => xScale2(d.date)).y(d => yScaleRight2(d.cum_covid_deaths)).curve(d3.curveMonotoneX);
 
+            // Transition the paths to the new line generators
             pathNewDeaths2.transition().duration(500).attr("d", lineNewDeaths2);
             pathCumDeaths2.transition().duration(500).attr("d", lineCumDeaths2);
 
+            // Update hover effects
             updateHover2();
         }
 
@@ -425,7 +432,7 @@ function initScene2() {
                 .attr('x', -margin.left + 10)
                 .attr('y', 10)
                 .attr('width', 400)
-                .attr('height', annotations.length * 20*1.3 + 30)
+                .attr('height', annotations.length * 20 * 1.3 + 30)
                 .attr('rx', 4)
                 .attr('ry', 4)
                 .attr('fill', 'white')
@@ -443,11 +450,12 @@ function initScene2() {
                 .attr('x', -margin.left + 20)
                 .attr('dy', '1.6em')
                 .text(d => d);
-             annotationGroup.append('a')
+
+            annotationGroup.append('a')
                 .attr('xlink:href', 'https://www.yalemedicine.org/news/covid-19-variants-of-concern-omicron')
                 .append('text')
                 .attr('x', -margin.left + 100)
-                .attr('y', annotations.length * 20 *1.3+ 35)
+                .attr('y', annotations.length * 20 * 1.3 + 35)
                 .attr('text-anchor', 'start')
                 .style('font-size', '14px')
                 .style('fill', 'blue')
@@ -500,9 +508,12 @@ function initScene2() {
             d3.select(this).classed('active', true);
             updateVisualization2(dataType);
         });
+
+        // Ensure initial call to updateVisualization2 to set up the chart
+        updateVisualization2('covid_deaths'); // or 'cum_covid_deaths' as needed
     });
 }
-    
+
 
 
 function initScene3() {
