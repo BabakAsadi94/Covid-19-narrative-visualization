@@ -179,46 +179,38 @@ function initScene1() {
             svg1.selectAll('.annotation').remove(); // Remove existing annotations
 
             const annotations = [
-                { date: new Date('2020-04-04'), label: 'The initial peak' },
-                { date: new Date('2021-01-09'), label: 'Significant surge in cases due to holiday gatherings and colder weather driving people indoors' },
-                { date: new Date('2021-09-04'), label: 'Peak of Delta variant' },
-                { date: new Date('2022-01-15'), label: 'Omicron variant resulted in record numbers of daily cases, though it generally caused less severe disease' }
+                { date: '2020-04-04', label: 'The initial peak' },
+                { date: '2021-01-09', label: 'Significant surge in cases due to holiday gatherings and colder weather driving people indoors' },
+                { date: '2021-09-04', label: 'Peak of Delta variant' },
+                { date: '2022-01-15', label: 'Omicron variant resulted in record numbers of daily cases, though it generally caused less severe disease' }
             ];
 
-            annotations.forEach(annotation => {
-                const x = xScale1(annotation.date);
-                const y = yScaleRight1(d3.max(countryData, d => d.cum_covid_cases));
+            const annotationGroup = svg1.append('g').attr('class', 'annotation');
 
-                svg1.append('line')
-                    .attr('class', 'annotation')
-                    .attr('x1', x)
-                    .attr('y1', yScaleLeft1(d3.max(countryData, d => d.covid_cases)))
-                    .attr('x2', x)
-                    .attr('y2', y - 40)
-                    .attr('stroke', 'black')
-                    .attr('stroke-width', 1)
-                    .attr('marker-end', 'url(#arrow)');
+            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n');
 
-                svg1.append('rect')
-                    .attr('class', 'annotation')
-                    .attr('x', x - 75)
-                    .attr('y', y - 60)
-                    .attr('width', 150)
-                    .attr('height', 50)
-                    .attr('rx', 4)
-                    .attr('ry', 4)
-                    .attr('fill', 'white')
-                    .attr('stroke', 'black');
+            annotationGroup.append('rect')
+                .attr('x', -margin.left + 10)
+                .attr('y', 10)
+                .attr('width', 300)
+                .attr('height', annotations.length * 20 + 20)
+                .attr('rx', 4)
+                .attr('ry', 4)
+                .attr('fill', 'white')
+                .attr('stroke', 'black');
 
-                svg1.append('text')
-                    .attr('class', 'annotation')
-                    .attr('x', x)
-                    .attr('y', y - 40)
-                    .attr('text-anchor', 'middle')
-                    .style('font-size', '10px')
-                    .style('font-weight', 'bold')
-                    .text(annotation.label);
-            });
+            annotationGroup.append('text')
+                .attr('x', -margin.left + 20)
+                .attr('y', 30)
+                .attr('text-anchor', 'start')
+                .style('font-size', '10px')
+                .style('font-weight', 'bold')
+                .selectAll('tspan')
+                .data(annotationText.split('\n'))
+                .enter().append('tspan')
+                .attr('x', -margin.left + 20)
+                .attr('dy', '1.2em')
+                .text(d => d);
         }
 
         function updateVisualization1(dataType) {
@@ -409,46 +401,38 @@ function initScene2() {
             svg2.selectAll('.annotation').remove(); // Remove existing annotations
 
             const annotations = [
-                { date: new Date('2020-04-18'), label: 'The initial peak' },
-                { date: new Date('2021-01-16'), label: 'The highest deaths record due to holiday gatherings and colder weather driving people indoors' },
-                { date: new Date('2021-09-25'), label: 'Peak of Delta variant' },
-                { date: new Date('2022-01-15'), label: 'Omicron variant' }
+                { date: '2020-04-18', label: 'The initial peak' },
+                { date: '2021-01-16', label: 'The highest deaths record due to holiday gatherings and colder weather driving people indoors' },
+                { date: '2021-09-25', label: 'Peak of Delta variant' },
+                { date: '2022-01-15', label: 'Omicron variant' }
             ];
 
-            annotations.forEach(annotation => {
-                const x = xScale2(annotation.date);
-                const y = yScaleRight2(d3.max(countryData, d => d.cum_covid_deaths));
+            const annotationGroup = svg2.append('g').attr('class', 'annotation');
 
-                svg2.append('line')
-                    .attr('class', 'annotation')
-                    .attr('x1', x)
-                    .attr('y1', yScaleLeft2(d3.max(countryData, d => d.covid_deaths)))
-                    .attr('x2', x)
-                    .attr('y2', y - 40)
-                    .attr('stroke', 'black')
-                    .attr('stroke-width', 1)
-                    .attr('marker-end', 'url(#arrow)');
+            const annotationText = annotations.map(d => `On ${d3.timeFormat("%b %d, %Y")(new Date(d.date))}: ${d.label}`).join('\n');
 
-                svg2.append('rect')
-                    .attr('class', 'annotation')
-                    .attr('x', x - 75)
-                    .attr('y', y - 60)
-                    .attr('width', 150)
-                    .attr('height', 50)
-                    .attr('rx', 4)
-                    .attr('ry', 4)
-                    .attr('fill', 'white')
-                    .attr('stroke', 'black');
+            annotationGroup.append('rect')
+                .attr('x', -margin.left + 10)
+                .attr('y', 10)
+                .attr('width', 300)
+                .attr('height', annotations.length * 20 + 20)
+                .attr('rx', 4)
+                .attr('ry', 4)
+                .attr('fill', 'white')
+                .attr('stroke', 'black');
 
-                svg2.append('text')
-                    .attr('class', 'annotation')
-                    .attr('x', x)
-                    .attr('y', y - 40)
-                    .attr('text-anchor', 'middle')
-                    .style('font-size', '10px')
-                    .style('font-weight', 'bold')
-                    .text(annotation.label);
-            });
+            annotationGroup.append('text')
+                .attr('x', -margin.left + 20)
+                .attr('y', 30)
+                .attr('text-anchor', 'start')
+                .style('font-size', '10px')
+                .style('font-weight', 'bold')
+                .selectAll('tspan')
+                .data(annotationText.split('\n'))
+                .enter().append('tspan')
+                .attr('x', -margin.left + 20)
+                .attr('dy', '1.2em')
+                .text(d => d);
         }
 
         function updateVisualization2(dataType) {
@@ -498,6 +482,7 @@ function initScene2() {
         });
     });
 }
+    
 
 
 function initScene3() {
